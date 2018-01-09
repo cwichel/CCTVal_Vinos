@@ -1,0 +1,42 @@
+Cabernet Sauvignon				
+ID	Marca	Viña	Valle	Año
+1	Carta Vieja	Carta Vieja S.A.	Loncomilla	2016
+2	León de Tarapaca	Tarapaca	Central	2016
+3	Anakena	Anakena	Central	2014
+4	Undurraga Pinot	Undurraga S.A.	Central	2016
+5	Montgras	Montgras S.A.		2016
+6	Gran 120	Santa Rita	Central	
+7	Santa Monica	Santa Monica Ltda.	Del Rapel	2003
+8	Misiones de Rengo	Misiones de Rengo S.A.	Central	2016
+9	Elemento	Botalcura S.A.	Del Maule	2015
+10	Misiones de Rengo	Misiones de Rengo S.A.	Central	2016
+11	Tierra Andina		Central	2016
+12	Balduzzi	Balduzzi	Del Maule	2014
+13	Clasico	Ventisquero	Central	2016
+14	120 Tres Medallas	Santa Rita	Central	2016
+15	Portal del Alto	Portal del Alto S.A.	Central	2015
+16	Santa Emiliana	Concha y Toro S.A.	Central	2015
+17	Gato Premium	San Pedro S.A.	Central	2016
+18	William Cole	William Cole	Colchagua	2013
+19	Santa Emiliana	Concha y Toro S.A.	Central	2015
+20	Valdivieso	Valdivieso S.A.	Central	2014
+21	Casillero del Diablo	Concha y Toro S.A.	Central	2016
+22	120	Santa Rita	Central	
+23	De Gras	Montgras S.A.		2015
+24	Casillero del Diablo	Concha y Toro S.A.	Central	2016
+25	Indomita	Indomita S.A.	Del Maipo	2016
+26	120	Santa Rita	Central	
+27	Torreon de Paredes	Torreon de Paredes S.A.	Cachapoal	2014
+28	Urmeneta	San Pedro S.A.	Central	2016
+29	Cosecha Tarapaca	Tarapaca	Central	2016
+30	Cono Sur	Cono Sur S.A.	Central	2016
+31	35 Sur	San Pedro S.A.	Central	2016
+32	Exportación Selecto	Concha y Toro S.A.		
+33	Doña Dominga	Casa Silva S.A.	Colchagua	2016
+34	Arauco		Central	2015
+35	Single Estate	Casas del Toqui	Central	2014
+36	Tres Estrellas	Santa Carolina S.A.	Del Rapel	2016
+37	Carmen	Carmen S.A.	Central	2016
+38	Gato	San Pedro Tarapacá S.A.		
+39	Frontera	Concha y Toro S.A.		2016
+40	Sunrise	Concha y Toro S.A.	Central	2016
