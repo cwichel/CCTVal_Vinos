@@ -290,7 +290,7 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_12">
              <item>
-              <widget class="QTextBrowser" name="display_read">
+              <widget class="QListView" name="listview_read">
                <property name="minimumSize">
                 <size>
                  <width>195</width>

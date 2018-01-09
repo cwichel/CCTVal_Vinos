@@ -11,9 +11,14 @@
 #pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
 ########################################################
 
+import os
+import glob
+import datetime
 
 from PyQt4 import QtCore, QtGui
 from VinosDBL import *
+from QListModel import *
+from random import *
 
 
 
@@ -37,16 +42,19 @@ class Ui_Form(QtGui.QWidget):
         # Declaración de elementos
         QtGui.QWidget.__init__(self)
         self.vinosDB = VinosDBL()
+        self.listM = ListModel()
         # ==============
         # Activación Elementos
         self.setupUi(self)
         self.setAction()
         self.databaseConnect()
+        # ==============
+        self.modelList = []
 
     def setupUi(self, ReadSaveData):
         ReadSaveData.setObjectName(_fromUtf8("ReadSaveData"))
-        ReadSaveData.resize(666, 350)
-        ReadSaveData.setMinimumSize(QtCore.QSize(500, 350))
+        ReadSaveData.resize(664, 468)
+        ReadSaveData.setMinimumSize(QtCore.QSize(550, 350))
         self.horizontalLayout_2 = QtGui.QHBoxLayout(ReadSaveData)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         self.ventanacompleta = QtGui.QTabWidget(ReadSaveData)
@@ -72,7 +80,7 @@ class Ui_Form(QtGui.QWidget):
         self.label_estanque.setObjectName(_fromUtf8("label_estanque"))
         self.verticalLayout_7.addWidget(self.label_estanque)
         self.linedit_estanquein = QtGui.QLineEdit(self.Adquirir)
-        self.linedit_estanquein.setMinimumSize(QtCore.QSize(145, 30))
+        self.linedit_estanquein.setMinimumSize(QtCore.QSize(198, 30))
         self.linedit_estanquein.setMaximumSize(QtCore.QSize(250, 30))
         self.linedit_estanquein.setObjectName(_fromUtf8("linedit_estanquein"))
         self.verticalLayout_7.addWidget(self.linedit_estanquein)
@@ -123,26 +131,36 @@ class Ui_Form(QtGui.QWidget):
         self.horizontalLayout_3.addLayout(self.verticalLayout_10)
         self.verticalLayout_11 = QtGui.QVBoxLayout()
         self.verticalLayout_11.setObjectName(_fromUtf8("verticalLayout_11"))
-        self.label_loadbar = QtGui.QLabel(self.Adquirir)
-        self.label_loadbar.setMinimumSize(QtCore.QSize(145, 30))
-        self.label_loadbar.setMaximumSize(QtCore.QSize(400, 30))
-        self.label_loadbar.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_loadbar.setObjectName(_fromUtf8("label_loadbar"))
-        self.verticalLayout_11.addWidget(self.label_loadbar)
-        self.loadbar1 = QtGui.QProgressBar(self.Adquirir)
-        self.loadbar1.setMinimumSize(QtCore.QSize(145, 30))
-        self.loadbar1.setMaximumSize(QtCore.QSize(295, 30))
-        self.loadbar1.setProperty("value", 24)
-        self.loadbar1.setObjectName(_fromUtf8("loadbar1"))
-        self.verticalLayout_11.addWidget(self.loadbar1)
+        self.horizontalLayout_6 = QtGui.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
+        self.boton_clearall = QtGui.QPushButton(self.Adquirir)
+        self.boton_clearall.setMinimumSize(QtCore.QSize(95, 30))
+        self.boton_clearall.setMaximumSize(QtCore.QSize(140, 30))
+        self.boton_clearall.setObjectName(_fromUtf8("boton_clearall"))
+        self.horizontalLayout_6.addWidget(self.boton_clearall)
+        self.boton_clearselect = QtGui.QPushButton(self.Adquirir)
+        self.boton_clearselect.setMinimumSize(QtCore.QSize(95, 30))
+        self.boton_clearselect.setMaximumSize(QtCore.QSize(140, 30))
+        self.boton_clearselect.setObjectName(_fromUtf8("boton_clearselect"))
+        self.horizontalLayout_6.addWidget(self.boton_clearselect)
+        self.verticalLayout_11.addLayout(self.horizontalLayout_6)
+        self.horizontalLayout_7 = QtGui.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
+        self.read_bar = QtGui.QProgressBar(self.Adquirir)
+        self.read_bar.setMinimumSize(QtCore.QSize(198, 30))
+        self.read_bar.setMaximumSize(QtCore.QSize(295, 30))
+        self.read_bar.setProperty("value", 24)
+        self.read_bar.setObjectName(_fromUtf8("read_bar"))
+        self.horizontalLayout_7.addWidget(self.read_bar)
+        self.verticalLayout_11.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_3.addLayout(self.verticalLayout_11)
         self.verticalLayout_12 = QtGui.QVBoxLayout()
         self.verticalLayout_12.setObjectName(_fromUtf8("verticalLayout_12"))
-        self.display_read = QtGui.QTextBrowser(self.Adquirir)
-        self.display_read.setMinimumSize(QtCore.QSize(195, 90))
-        self.display_read.setMaximumSize(QtCore.QSize(250, 150))
-        self.display_read.setObjectName(_fromUtf8("display_read"))
-        self.verticalLayout_12.addWidget(self.display_read)
+        self.listview_read = QtGui.QListView(self.Adquirir)
+        self.listview_read.setMinimumSize(QtCore.QSize(195, 90))
+        self.listview_read.setMaximumSize(QtCore.QSize(250, 150))
+        self.listview_read.setObjectName(_fromUtf8("listview_read"))
+        self.verticalLayout_12.addWidget(self.listview_read)
         self.horizontalLayout_3.addLayout(self.verticalLayout_12)
         self.verticalLayout_9.addLayout(self.horizontalLayout_3)
         self.verticalLayout_5.addLayout(self.verticalLayout_9)
@@ -168,13 +186,13 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_15 = QtGui.QVBoxLayout()
         self.verticalLayout_15.setObjectName(_fromUtf8("verticalLayout_15"))
         self.label_savebar = QtGui.QLabel(self.Adquirir)
-        self.label_savebar.setMinimumSize(QtCore.QSize(145, 30))
-        self.label_savebar.setMaximumSize(QtCore.QSize(400, 30))
+        self.label_savebar.setMinimumSize(QtCore.QSize(198, 30))
+        self.label_savebar.setMaximumSize(QtCore.QSize(295, 30))
         self.label_savebar.setAlignment(QtCore.Qt.AlignCenter)
         self.label_savebar.setObjectName(_fromUtf8("label_savebar"))
         self.verticalLayout_15.addWidget(self.label_savebar)
         self.save_bar = QtGui.QProgressBar(self.Adquirir)
-        self.save_bar.setMinimumSize(QtCore.QSize(145, 30))
+        self.save_bar.setMinimumSize(QtCore.QSize(198, 30))
         self.save_bar.setMaximumSize(QtCore.QSize(295, 30))
         self.save_bar.setProperty("value", 24)
         self.save_bar.setObjectName(_fromUtf8("save_bar"))
@@ -242,7 +260,8 @@ class Ui_Form(QtGui.QWidget):
         self.boton_estado.setText(_translate("ReadSaveData", "Exist?", None))
         self.label_read.setText(_translate("ReadSaveData", "Leer Espectro", None))
         self.boton_load.setText(_translate("ReadSaveData", "Ok", None))
-        self.label_loadbar.setText(_translate("ReadSaveData", "Listo?", None))
+        self.boton_clearall.setText(_translate("ReadSaveData", "Clear All", None))
+        self.boton_clearselect.setText(_translate("ReadSaveData", "Clear Select", None))
         self.label_save.setText(_translate("ReadSaveData", "Guardar", None))
         self.boton_save.setText(_translate("ReadSaveData", "Ok", None))
         self.label_savebar.setText(_translate("ReadSaveData", "Listo?", None))
@@ -263,9 +282,12 @@ class Ui_Form(QtGui.QWidget):
         }
         self.vinosDB.connect(db_config)
 
-
     def setAction(self):
         self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
+        self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
+        self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
+        self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
+        self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
 
 
     def boton_estadoHandler(self, tankName):
@@ -273,19 +295,48 @@ class Ui_Form(QtGui.QWidget):
         data = self.vinosDB.read_estanque(tankName)
         self.display_row1(data, tankName)
 
-
     def display_row1(self, data, tankName):
         self.display_estanques.clear()
         if not data:
             error = u'*** ERROR: Estanque N° %d No Existe***' % tankName
             self.display_estanques.append(u' %s' % error)
         else:
-            num  = data[0][0]
+            num = data[0][0]
             desc = data[0][1].split(u', ')
             self.display_estanques.append(u' Estanque número: %s \t ' % num)
             for i in range(len(desc)):
                 self.display_estanques.append(u' %s' % desc[i])
 
+
+    def boton_clearallHandler(self):
+        self.modelList = []
+        model = ListModel(self.modelList)
+        self.listview_read.setModel(model)
+
+    def boton_loadHandler(self):
+        ts = datetime.datetime.now().strftime(" - %Y-%m-%d %H:%M:%S")
+        path = "../data/Espectros/*.txt"
+        files = glob.glob(path)
+        temp = files[randint(1, len(files)-1)] + ts
+        self.modelList.append(temp)
+        model = ListModel(self.modelList)
+        self.listview_read.setModel(model)
+
+    def boton_clearselectHandler(self):
+        print 'VOOOOOOOOY'
+
+
+
+        # fileList = [unicode(os.path.splitext(os.path.basename(itm))[0]) for itm in files]
+        # print fileList
+
+
+#   def display_listread(self, data):
+#       if not data:
+#           error = u'*** ERROR: Espectro en mal estado ***'
+#           self.listview_read.
+#       else:
+#           self.listview_read.append(data)
 
 
 
