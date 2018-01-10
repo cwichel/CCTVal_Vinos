@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="Adquirir">
       <property name="minimumSize">
@@ -133,7 +133,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Exist?</string>
+                <string>Verificar</string>
                </property>
               </widget>
              </item>
@@ -190,7 +190,8 @@
                 </size>
                </property>
                <property name="text">
-                <string>Leer Espectro</string>
+                <string>Adquirir
+Espectro</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
@@ -212,7 +213,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Ok</string>
+                <string>Adquirir</string>
                </property>
               </widget>
              </item>
@@ -220,6 +221,29 @@
            </item>
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_11">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QProgressBar" name="read_bar">
+                 <property name="minimumSize">
+                  <size>
+                   <width>198</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>295</width>
+                   <height>30</height>
+                  </size>
+                 </property>
+                 <property name="value">
+                  <number>24</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
@@ -257,29 +281,6 @@
                  </property>
                  <property name="text">
                   <string>Clear Select</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_7">
-               <item>
-                <widget class="QProgressBar" name="read_bar">
-                 <property name="minimumSize">
-                  <size>
-                   <width>198</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>295</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="value">
-                  <number>24</number>
                  </property>
                 </widget>
                </item>
@@ -453,10 +454,10 @@
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QLabel" name="label">
+            <widget class="QLabel" name="label_comboboxplot">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>120</width>
                <height>25</height>
               </size>
              </property>
@@ -467,12 +468,12 @@
               </size>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>Espectros Adquiridos</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="comboBox">
+            <widget class="QComboBox" name="combobox_plot">
              <property name="minimumSize">
               <size>
                <width>340</width>

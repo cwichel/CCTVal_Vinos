@@ -12,6 +12,13 @@ class ListModel(QtCore.QAbstractListModel):
         QtCore.QAbstractListModel.__init__(self, parent)
         self.__files = files
 
+    def headerData(self, section, orientation, role):
+        if role == QtCore.Qt.DisplayRole:
+            if orientation == QtCore.Qt.Horizontal:
+                return QtCore.QString("Espectros Adquiridos")
+            else:
+                return QtCore.QString("Espectro %d").arg(section)
+
     def rowCount(self, parent):
         largo = len(self.__files)
         return largo
@@ -27,3 +34,14 @@ class ListModel(QtCore.QAbstractListModel):
 
             return value
 
+    # def flags(self, index):
+    #     return QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsEditable
+    #
+    #
+    # def clearData(self, index, role = QtCore.Qt.EditRole):
+    #
+    #     if role == QtCore.Qt.EditRole:
+    #         row = index.row()
+    #         del self.__files[row]
+    #         return true
+    #     return false

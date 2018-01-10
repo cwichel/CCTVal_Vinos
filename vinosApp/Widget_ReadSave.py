@@ -51,6 +51,10 @@ class Ui_Form(QtGui.QWidget):
         # ==============
         self.modelList = []
 
+##################################################################
+################### Upgradeable de QtDesigner ####################
+##################################################################
+
     def setupUi(self, ReadSaveData):
         ReadSaveData.setObjectName(_fromUtf8("ReadSaveData"))
         ReadSaveData.resize(664, 468)
@@ -131,6 +135,15 @@ class Ui_Form(QtGui.QWidget):
         self.horizontalLayout_3.addLayout(self.verticalLayout_10)
         self.verticalLayout_11 = QtGui.QVBoxLayout()
         self.verticalLayout_11.setObjectName(_fromUtf8("verticalLayout_11"))
+        self.horizontalLayout_7 = QtGui.QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
+        self.read_bar = QtGui.QProgressBar(self.Adquirir)
+        self.read_bar.setMinimumSize(QtCore.QSize(198, 30))
+        self.read_bar.setMaximumSize(QtCore.QSize(295, 30))
+        self.read_bar.setProperty("value", 24)
+        self.read_bar.setObjectName(_fromUtf8("read_bar"))
+        self.horizontalLayout_7.addWidget(self.read_bar)
+        self.verticalLayout_11.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_6 = QtGui.QHBoxLayout()
         self.horizontalLayout_6.setObjectName(_fromUtf8("horizontalLayout_6"))
         self.boton_clearall = QtGui.QPushButton(self.Adquirir)
@@ -144,15 +157,6 @@ class Ui_Form(QtGui.QWidget):
         self.boton_clearselect.setObjectName(_fromUtf8("boton_clearselect"))
         self.horizontalLayout_6.addWidget(self.boton_clearselect)
         self.verticalLayout_11.addLayout(self.horizontalLayout_6)
-        self.horizontalLayout_7 = QtGui.QHBoxLayout()
-        self.horizontalLayout_7.setObjectName(_fromUtf8("horizontalLayout_7"))
-        self.read_bar = QtGui.QProgressBar(self.Adquirir)
-        self.read_bar.setMinimumSize(QtCore.QSize(198, 30))
-        self.read_bar.setMaximumSize(QtCore.QSize(295, 30))
-        self.read_bar.setProperty("value", 24)
-        self.read_bar.setObjectName(_fromUtf8("read_bar"))
-        self.horizontalLayout_7.addWidget(self.read_bar)
-        self.verticalLayout_11.addLayout(self.horizontalLayout_7)
         self.horizontalLayout_3.addLayout(self.verticalLayout_11)
         self.verticalLayout_12 = QtGui.QVBoxLayout()
         self.verticalLayout_12.setObjectName(_fromUtf8("verticalLayout_12"))
@@ -219,16 +223,16 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_6.setObjectName(_fromUtf8("verticalLayout_6"))
         self.horizontalLayout_5 = QtGui.QHBoxLayout()
         self.horizontalLayout_5.setObjectName(_fromUtf8("horizontalLayout_5"))
-        self.label = QtGui.QLabel(self.Visualizar)
-        self.label.setMinimumSize(QtCore.QSize(100, 25))
-        self.label.setMaximumSize(QtCore.QSize(100, 25))
-        self.label.setObjectName(_fromUtf8("label"))
-        self.horizontalLayout_5.addWidget(self.label)
-        self.comboBox = QtGui.QComboBox(self.Visualizar)
-        self.comboBox.setMinimumSize(QtCore.QSize(340, 25))
-        self.comboBox.setMaximumSize(QtCore.QSize(1000, 25))
-        self.comboBox.setObjectName(_fromUtf8("comboBox"))
-        self.horizontalLayout_5.addWidget(self.comboBox)
+        self.label_comboboxplot = QtGui.QLabel(self.Visualizar)
+        self.label_comboboxplot.setMinimumSize(QtCore.QSize(120, 25))
+        self.label_comboboxplot.setMaximumSize(QtCore.QSize(100, 25))
+        self.label_comboboxplot.setObjectName(_fromUtf8("label_comboboxplot"))
+        self.horizontalLayout_5.addWidget(self.label_comboboxplot)
+        self.combobox_plot = QtGui.QComboBox(self.Visualizar)
+        self.combobox_plot.setMinimumSize(QtCore.QSize(340, 25))
+        self.combobox_plot.setMaximumSize(QtCore.QSize(1000, 25))
+        self.combobox_plot.setObjectName(_fromUtf8("combobox_plot"))
+        self.horizontalLayout_5.addWidget(self.combobox_plot)
         self.verticalLayout_6.addLayout(self.horizontalLayout_5)
         self.verticalLayout.addLayout(self.verticalLayout_6)
         self.verticalLayout_18 = QtGui.QVBoxLayout()
@@ -250,26 +254,32 @@ class Ui_Form(QtGui.QWidget):
         self.horizontalLayout_2.addWidget(self.ventanacompleta)
 
         self.retranslateUi(ReadSaveData)
-        self.ventanacompleta.setCurrentIndex(0)
+        self.ventanacompleta.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(ReadSaveData)
 
     def retranslateUi(self, ReadSaveData):
         ReadSaveData.setWindowTitle(_translate("ReadSaveData", "Form", None))
         self.label_estanque.setText(_translate("ReadSaveData", "  N° Estanque", None))
         self.label_estado.setText(_translate("ReadSaveData", "  Estado", None))
-        self.boton_estado.setText(_translate("ReadSaveData", "Exist?", None))
-        self.label_read.setText(_translate("ReadSaveData", "Leer Espectro", None))
-        self.boton_load.setText(_translate("ReadSaveData", "Ok", None))
+        self.boton_estado.setText(_translate("ReadSaveData", "Verificar", None))
+        self.label_read.setText(_translate("ReadSaveData", "Adquirir\n"
+                                                           "Espectro", None))
+        self.boton_load.setText(_translate("ReadSaveData", "Adquirir", None))
         self.boton_clearall.setText(_translate("ReadSaveData", "Clear All", None))
         self.boton_clearselect.setText(_translate("ReadSaveData", "Clear Select", None))
         self.label_save.setText(_translate("ReadSaveData", "Guardar", None))
         self.boton_save.setText(_translate("ReadSaveData", "Ok", None))
         self.label_savebar.setText(_translate("ReadSaveData", "Listo?", None))
-        self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Adquirir), _translate("ReadSaveData", "Tab 1", None))
-        self.label.setText(_translate("ReadSaveData", "TextLabel", None))
+        self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Adquirir),
+                                        _translate("ReadSaveData", "Tab 1", None))
+        self.label_comboboxplot.setText(_translate("ReadSaveData", "Espectros Adquiridos", None))
         self.label_3.setText(_translate("ReadSaveData", "TextLabel", None))
-        self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Visualizar), _translate("ReadSaveData", "Tab 2", None))
+        self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Visualizar),
+                                        _translate("ReadSaveData", "Tab 2", None))
 
+##################################################################
+################### Desarrollo de Aplicacion #####################
+##################################################################
 
     def databaseConnect(self):
         # Configuración de la DB y conexión:
@@ -288,6 +298,7 @@ class Ui_Form(QtGui.QWidget):
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
         self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
+        #self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
 
 
     def boton_estadoHandler(self, tankName):
@@ -323,20 +334,20 @@ class Ui_Form(QtGui.QWidget):
         self.listview_read.setModel(model)
 
     def boton_clearselectHandler(self):
-        print 'VOOOOOOOOY'
+        itemIndex = self.listview_read.currentIndex().row()
+        itemTotal = len(self.modelList)
+        if itemTotal is not 0 and itemIndex is not -1:
+            print u'Modifying item...'
+            del self.modelList[itemIndex]
+            model = ListModel(self.modelList)
+            self.listview_read.setModel(model)
+        else:
+            print u'No item selected/available!'
 
 
 
-        # fileList = [unicode(os.path.splitext(os.path.basename(itm))[0]) for itm in files]
-        # print fileList
 
 
-#   def display_listread(self, data):
-#       if not data:
-#           error = u'*** ERROR: Espectro en mal estado ***'
-#           self.listview_read.
-#       else:
-#           self.listview_read.append(data)
 
 
 
