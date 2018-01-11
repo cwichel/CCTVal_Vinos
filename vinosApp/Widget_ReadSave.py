@@ -11,15 +11,14 @@
 #pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
 ########################################################
 
-import os
+
 import glob
 import datetime
+from random import *
 
 from PyQt4 import QtCore, QtGui
 from VinosDBL import *
 from QListModel import *
-from random import *
-
 
 
 try:
@@ -49,7 +48,9 @@ class Ui_Form(QtGui.QWidget):
         self.setAction()
         self.databaseConnect()
         # ==============
-        self.modelList = []
+        # Inicializando Modelos
+        self.model = ListModel([])
+        self.initModels()
 
 ##################################################################
 ################### Upgradeable de QtDesigner ####################
@@ -281,6 +282,10 @@ class Ui_Form(QtGui.QWidget):
 ################### Desarrollo de Aplicacion #####################
 ##################################################################
 
+    def initModels(self):
+        self.listview_read.setModel(self.model)
+
+
     def databaseConnect(self):
         # Configuración de la DB y conexión:
         db_config = {
@@ -297,9 +302,7 @@ class Ui_Form(QtGui.QWidget):
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
-        self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
-        #self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
-
+        self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())#
 
     def boton_estadoHandler(self, tankName):
         tankName = int(tankName)
@@ -318,32 +321,46 @@ class Ui_Form(QtGui.QWidget):
             for i in range(len(desc)):
                 self.display_estanques.append(u' %s' % desc[i])
 
-
-    def boton_clearallHandler(self):
-        self.modelList = []
-        model = ListModel(self.modelList)
-        self.listview_read.setModel(model)
-
     def boton_loadHandler(self):
         ts = datetime.datetime.now().strftime(" - %Y-%m-%d %H:%M:%S")
         path = "../data/Espectros/*.txt"
         files = glob.glob(path)
-        temp = files[randint(1, len(files)-1)] + ts
-        self.modelList.append(temp)
-        model = ListModel(self.modelList)
-        self.listview_read.setModel(model)
+        temp = files[randint(1, len(files) - 1)] + ts
+        self.model.addNewValue(temp)
+        self.model.reset()
 
     def boton_clearselectHandler(self):
-        itemIndex = self.listview_read.currentIndex().row()
-        itemTotal = len(self.modelList)
-        if itemTotal is not 0 and itemIndex is not -1:
-            print u'Modifying item...'
-            del self.modelList[itemIndex]
-            model = ListModel(self.modelList)
-            self.listview_read.setModel(model)
-        else:
-            print u'No item selected/available!'
+        self.model.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
+        self.model.reset()
 
+
+
+
+# implementacion tonta
+####def boton_clearallHandler(self):
+####    self.modelList = []
+####    model = ListModel(self.modelList)
+####    self.listview_read.setModel(model)
+
+####def boton_loadHandler(self):###
+####    ts = datetime.datetime.now().strftime(" - %Y-%m-%d %H:%M:%S")
+####    path = "../data/Espectros/*.txt"
+####    files = glob.glob(path)
+####    temp = files[randint(1, len(files)-1)] + ts
+####    self.modelList.append(temp)
+####    model = ListModel(self.modelList)
+####    self.listview_read.setModel(model)
+
+####def boton_clearselectHandler(self):
+####    itemIndex = self.listview_read.currentIndex().row()
+####    itemTotal = len(self.modelList)
+####    if itemTotal is not 0 and itemIndex is not -1:
+####        print u'Modifying item...'
+####        del self.modelList[itemIndex]
+####        model = ListModel(self.modelList)
+####        self.listview_read.setModel(model)
+####    else:
+####        print u'No item selected/available!
 
 
 
