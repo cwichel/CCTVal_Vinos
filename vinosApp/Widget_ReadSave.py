@@ -45,12 +45,12 @@ class Ui_Form(QtGui.QWidget):
         # ==============
         # Activación Elementos
         self.setupUi(self)
-        self.setAction()
         self.databaseConnect()
         # ==============
         # Inicializando Modelos
         self.model = ListModel([])
         self.initModels()
+        self.setAction()
 
 ##################################################################
 ################### Upgradeable de QtDesigner ####################
@@ -284,6 +284,7 @@ class Ui_Form(QtGui.QWidget):
 
     def initModels(self):
         self.listview_read.setModel(self.model)
+        self.combobox_plot.setModel(self.model)
 
 
     def databaseConnect(self):
@@ -301,7 +302,11 @@ class Ui_Form(QtGui.QWidget):
         self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
-        self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())#
+        self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
+
+        self.listview_read.selectionModel().selectionChanged.connect(lambda: self.listread2comboboxplot())
+
+        self.combobox_plot.activated.connect(lambda: self.combobox_plotHandler())
 
     def boton_estadoHandler(self, tankName):
         tankName = int(tankName)
@@ -327,6 +332,7 @@ class Ui_Form(QtGui.QWidget):
         temp = files[randint(1, len(files) - 1)] + ts
         self.model.addNewValue(temp)
         self.model.reset()
+        self.listview_read.setCurrentIndex(self.model.index(0))
 
     def boton_clearselectHandler(self):
         itemIndex = self.listview_read.currentIndex().row()
@@ -334,12 +340,34 @@ class Ui_Form(QtGui.QWidget):
         if itemTotal is not 0 and itemIndex is not -1:
             self.model.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
             self.model.reset()
+            if itemIndex > 0:
+                self.listview_read.setCurrentIndex(self.model.index(itemIndex-1))
+            else:
+                self.listview_read.setCurrentIndex(self.model.index(0))
         else:
             print u'No item selected/available!'
 
     def boton_clearallHandler(self):
         self.model.removeAllRows()
         self.model.reset()
+
+    def combobox_plotHandler(self):
+        itemIndex = self.combobox_plot.currentIndex()
+        itemTotal = self.model.rowCount(None)
+        if itemTotal is not 0 and itemIndex is not -1:
+            if itemIndex > 0:
+                self.listview_read.setCurrentIndex(self.model.index(itemIndex))
+            else:
+                self.listview_read.setCurrentIndex(self.model.index(0))
+        else:
+            print u'No item selected/available!'
+
+    def listread2comboboxplot(self):
+        itemIndex = self.listview_read.currentIndex().row()
+        self.combobox_plot.setCurrentIndex(itemIndex)
+
+
+
 
 
 
