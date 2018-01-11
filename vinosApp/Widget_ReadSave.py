@@ -11,10 +11,13 @@
 #pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
 ########################################################
 
-
+import sys
 import glob
 import datetime
-import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.figure import Figure
 from random import *
 from PyQt4 import QtCore, QtGui
 from VinosDBL import *
@@ -41,7 +44,7 @@ class Ui_Form(QtGui.QWidget):
         # Declaración de elementos
         QtGui.QWidget.__init__(self)
         self.vinosDB = VinosDBL()
-        self.listM = ListModel()
+        self.figure = Figure()
         # ==============
         # Activación Elementos
         self.setupUi(self)
@@ -51,6 +54,7 @@ class Ui_Form(QtGui.QWidget):
         self.model = ListModel([])
         self.initModels()
         self.setAction()
+        #self.win = pg.GraphicsWindow(title="Wiche")
 
 ##################################################################
 ################### Upgradeable de QtDesigner ####################
@@ -245,10 +249,23 @@ class Ui_Form(QtGui.QWidget):
         self.label_3.setMaximumSize(QtCore.QSize(400, 25))
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.verticalLayout_19.addWidget(self.label_3)
-        self.graphicsView = QtGui.QGraphicsView(self.Visualizar)
-        self.graphicsView.setMinimumSize(QtCore.QSize(450, 145))
-        self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
-        self.verticalLayout_19.addWidget(self.graphicsView)
+
+        #########################################################
+
+        # self.graphics_view = QtGui.QGraphicsView(self.Visualizar)
+        # self.graphics_view.setMinimumSize(QtCore.QSize(450, 145))
+        # self.graphics_view.setObjectName(_fromUtf8("graphics_view"))
+        # self.verticalLayout_19.addWidget(self.graphics_view)
+
+        self.graphic = FigureCanvas(self.figure)
+        self.graphics_view = NavigationToolbar(self.graphic, self)
+        self.graphics_view.setMinimumSize(QtCore.QSize(450, 25))
+        self.graphics_view.setObjectName(_fromUtf8("graphics_view"))
+        self.verticalLayout_19.addWidget(self.graphics_view)
+        self.verticalLayout_19.addWidget(self.graphic)
+
+        ########################################################
+
         self.verticalLayout_18.addLayout(self.verticalLayout_19)
         self.verticalLayout.addLayout(self.verticalLayout_18)
         self.ventanacompleta.addTab(self.Visualizar, _fromUtf8(""))
@@ -286,7 +303,6 @@ class Ui_Form(QtGui.QWidget):
         self.listview_read.setModel(self.model)
         self.combobox_plot.setModel(self.model)
 
-
     def databaseConnect(self):
         # Configuración de la DB y conexión:
         db_config = {
@@ -303,10 +319,10 @@ class Ui_Form(QtGui.QWidget):
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
         self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
-
         self.listview_read.selectionModel().selectionChanged.connect(lambda: self.listread2comboboxplot())
-
         self.combobox_plot.activated.connect(lambda: self.combobox_plotHandler())
+
+        self.combobox_plot.activated.connect(lambda: self.plotEspectro())
 
     def boton_estadoHandler(self, tankName):
         tankName = int(tankName)
@@ -366,8 +382,23 @@ class Ui_Form(QtGui.QWidget):
         itemIndex = self.listview_read.currentIndex().row()
         self.combobox_plot.setCurrentIndex(itemIndex)
 
+    def plotEspectro(self):
+        itemIndex = self.combobox_plot.currentIndex()
+        data = self.model.consultData(itemIndex)
 
-    def plotEspectro(self, data):
+        print data
+
+
+        #ax = self.figure.add_subplot(111)
+        #ax.clear()
+        #ax.plot(data)
+        #self.graphics_view.draw()
+
+
+
+
+
+
 
 
 

@@ -54,3 +54,6 @@ class ListModel(QtCore.QAbstractListModel):
     def removeAllRows(self):
         self.__files = []
         return True
+
+    def consultData(self, index):
+        return self.__files[index]

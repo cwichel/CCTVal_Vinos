@@ -516,7 +516,7 @@ Espectro</string>
             </widget>
            </item>
            <item>
-            <widget class="QGraphicsView" name="graphicsView">
+            <widget class="QGraphicsView" name="graphics_view">
              <property name="minimumSize">
               <size>
                <width>450</width>

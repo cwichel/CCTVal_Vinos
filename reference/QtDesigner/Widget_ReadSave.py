@@ -23,7 +23,6 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_ReadSaveData(object):
-
     def setupUi(self, ReadSaveData):
         ReadSaveData.setObjectName(_fromUtf8("ReadSaveData"))
         ReadSaveData.resize(664, 468)
@@ -213,10 +212,10 @@ class Ui_ReadSaveData(object):
         self.label_3.setMaximumSize(QtCore.QSize(400, 25))
         self.label_3.setObjectName(_fromUtf8("label_3"))
         self.verticalLayout_19.addWidget(self.label_3)
-        self.graphicsView = QtGui.QGraphicsView(self.Visualizar)
-        self.graphicsView.setMinimumSize(QtCore.QSize(450, 145))
-        self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
-        self.verticalLayout_19.addWidget(self.graphicsView)
+        self.graphics_view = QtGui.QGraphicsView(self.Visualizar)
+        self.graphics_view.setMinimumSize(QtCore.QSize(450, 145))
+        self.graphics_view.setObjectName(_fromUtf8("graphics_view"))
+        self.verticalLayout_19.addWidget(self.graphics_view)
         self.verticalLayout_18.addLayout(self.verticalLayout_19)
         self.verticalLayout.addLayout(self.verticalLayout_18)
         self.ventanacompleta.addTab(self.Visualizar, _fromUtf8(""))
