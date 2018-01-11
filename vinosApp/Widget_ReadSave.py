@@ -14,8 +14,8 @@
 
 import glob
 import datetime
+import matplotlib.pyplot as plt
 from random import *
-
 from PyQt4 import QtCore, QtGui
 from VinosDBL import *
 from QListModel import *
@@ -367,6 +367,7 @@ class Ui_Form(QtGui.QWidget):
         self.combobox_plot.setCurrentIndex(itemIndex)
 
 
+    def plotEspectro(self, data):
 
 
 
