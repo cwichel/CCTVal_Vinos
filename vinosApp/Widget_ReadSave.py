@@ -301,7 +301,6 @@ class Ui_Form(QtGui.QWidget):
         self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
-        self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
         self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())#
 
     def boton_estadoHandler(self, tankName):
@@ -330,7 +329,16 @@ class Ui_Form(QtGui.QWidget):
         self.model.reset()
 
     def boton_clearselectHandler(self):
-        self.model.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
+        itemIndex = self.listview_read.currentIndex().row()
+        itemTotal = self.model.rowCount(None)
+        if itemTotal is not 0 and itemIndex is not -1:
+            self.model.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
+            self.model.reset()
+        else:
+            print u'No item selected/available!'
+
+    def boton_clearallHandler(self):
+        self.model.removeAllRows()
         self.model.reset()
 
 
