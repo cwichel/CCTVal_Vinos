@@ -1,71 +1,100 @@
-#!/usr/bin/python
-# -*- coding: latin5 -*-
-
-# Libraries #####################################
+# -*- coding: utf-8 -*-
+# =============================================================================
+# Modules
+# =============================================================================
 import numpy as np
 import mysql.connector as msq
 from mysql.connector import errorcode
 
 
-# Vinos dbClass #################################
+# =============================================================================
+# VinosDBL
+# =============================================================================
 class VinosDBL:
     def __init__(self):
         self.data = []
-        self.encoding = 'latin5'
+        self.encoding = u'latin5'
         self.field_type = {
-            0:      "%f",                   # DECIMAL
-            4:      "%f",				    # FLOAT
-            5:      "%f",				    # DOUBLE
-            1:      "%d",				    # TINY
-            2:      "%d",				    # SHORT
-            3:      "%d",				    # LONG
-            9:      "%d",				    # INT24
-            6:      "NULL",				    # NULL
-            8:      "LONGLONG",			    # LONGLONG
-            246:    "NEWDECIMAL",           # NEWDECIMAL
-            247:    "INTERVAL",             # INTERVAL
-            248:    "SET",                  # SET
-            255:    "GEOMETRY", 		    # GEOMETRY
-            14:     "NEWDATE",			    # NEWDATE
-            7:      "TIMESTAMP",	        # TIMESTAMP
-            13:     "%Y",				    # YEAR
-            10:     "%Y-%m-%d",			    # DATE
-            11:     "%H:%M:%S",			    # TIME
-            12:     "%Y-%m-%d %H:%M:%S",    # DATETIME
-            16:     "'%x'",				    # BIT
-            15:     "'%s'",				    # VARCHAR
-            249:    "'%s'",			        # TINY BLOB
-            250:    "'%s'",			        # MEDIUM BLOB
-            251:    "'%s'",			        # LONG BLOB
-            252:    "'%s'",			        # BLOB
-            253:    "'%s'",			        # VAR STRING
-            254:    "'%s'"			        # STRING
+            0:      u"%f",                  # DECIMAL
+            4:      u"%f",				    # FLOAT
+            5:      u"%f",				    # DOUBLE
+            1:      u"%d",				    # TINY
+            2:      u"%d",				    # SHORT
+            3:      u"%d",				    # LONG
+            9:      u"%d",				    # INT24
+            6:      u"NULL",				# NULL
+            8:      u"LONGLONG",			# LONGLONG
+            246:    u"NEWDECIMAL",          # NEWDECIMAL
+            247:    u"INTERVAL",            # INTERVAL
+            248:    u"SET",                 # SET
+            255:    u"GEOMETRY", 		    # GEOMETRY
+            14:     u"NEWDATE",			    # NEWDATE
+            7:      u"TIMESTAMP",	        # TIMESTAMP
+            13:     u"%Y",				    # YEAR
+            10:     u"%Y-%m-%d",			# DATE
+            11:     u"%H:%M:%S",			# TIME
+            12:     u"%Y-%m-%d %H:%M:%S",   # DATETIME
+            16:     u"'%x'",				# BIT
+            15:     u"'%s'",				# VARCHAR
+            249:    u"'%s'",                # TINY BLOB
+            250:    u"'%s'",			    # MEDIUM BLOB
+            251:    u"'%s'",			    # LONG BLOB
+            252:    u"'%s'",			    # BLOB
+            253:    u"'%s'",			    # VAR STRING
+            254:    u"'%s'"			        # STRING
             }
 
-    # ================================= Conexi髇 a la DB
+    # =================================
+    # Metodos de conexion
+    # =================================
     def connect(self, config):
+        '''
+        Funci贸n que permite conectarse a una base de datos.
+        :param config: dict.
+        :return: Boolean.
+                - True: Connection succeeded.
+                - False: Error.
+        '''
         try:
-            config['charset'] = self.encoding
+            config[u'charset'] = self.encoding
             self.conn = msq.connect(**config)
+            return True
         except msq.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print "*** ERROR: Something is wrong with your user name or password. ***"
+                print u"*** ERROR: Something is wrong with your user name or password. ***"
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print "*** ERROR: Database does not exists. ***"
+                print u"*** ERROR: Database does not exists. ***"
             else:
-                print "*** ERROR: Check your connection or host name. ***"
+                print u"*** ERROR: Check your connection or host name. ***"
+            return False
 
-    # -----------------------
     def close(self):
+        '''
+        Funci贸n que permite cerrar la conexi贸n actual a la base de datos.
+        :return: Boolean.
+                - True: Connection closed.
+                - False: Error.
+        '''
         try:
             self.conn.close()
+            return True
         except:
-            print "*** ERROR: No connection to close. ***"
+            print u"*** ERROR: No connection to close. ***"
+            return False
 
-    # ================================= Utilidades de la DB
+    # =================================
+    # Metodos utilitarios
+    # =================================
     def is_table(self, table_name):
+        '''
+        Funci贸n que indica si una tabla existe o no en la base de datos.
+        :param table_name: Str.
+        :return: Boolean.
+                - True: Table exist.
+                - False: Table doesn't exist.
+        '''
         try:
-            query = "show tables like '%s'" % table_name
+            query = u"show tables like '%s'" % table_name
             cursor = self.conn.cursor()
             cursor.execute(query)
             result = cursor.fetchall()
@@ -77,52 +106,53 @@ class VinosDBL:
         except:
             return False
 
-    # -----------------------
     def get_columns(self, table_name):
+        '''
+        Funci贸n que devuelve los nombres de sus columnas y sus tipos de dato.
+        :param table_name: Str.
+        :return: names: List, types: List.
+        '''
         if self.is_table(table_name):
-            query = "select * from %s limit 0" % table_name
+            query = u"select * from %s limit 0" % table_name
             cursor = self.conn.cursor()
             cursor.execute(query)
             result = cursor.fetchall()      # evitar errores por no uso
             result = np.array(cursor.description)
             cursor.close()
-            names = ''
-            types = ''
+            names = u''
+            types = u''
             column = len(result[:, 0])
             for col in range(column):
                 if col < (column - 1):
-                    names += result[col, 0] + ', '
-                    types += self.field_type[result[col, 1]] + ', '
+                    names += result[col, 0] + u', '
+                    types += self.field_type[result[col, 1]] + u', '
                 else:
                     names += result[col, 0]
                     types += self.field_type[result[col, 1]]
             return names, types
         else:
-            print "*** ERROR: Table doesn't exists. ***"
+            print u"*** ERROR: Table doesn't exists. ***"
             return None, None
 
-    # ================================= Utilitarios
     @staticmethod
     def enc_file(file_name):
         '''
-        Funci髇 que permite codificar un archivo para almacenarlo en la DB.
+        Funci贸n que permite codificar un archivo para almacenarlo en la DB.
         :param file_name:  Str.
         :return: Str (coded).
         '''
-        file_data = open(file_name, 'r').read()
-        return file_data.encode('base64')
+        file_data = open(file_name, u'r').read()
+        return file_data.encode(u'base64')
 
-    # -----------------------
     @staticmethod
     def dec_file(b64_file):
         '''
-        Funci髇 que permite decodificar un archivo luego de bajarlo de la DB.
+        Funci贸n que permite decodificar un archivo luego de bajarlo de la DB.
         :param b64_file: Str (coded).
         :return: Str.
         '''
-        return b64_file.decode('base64')
+        return b64_file.decode(u'base64')
 
-    # -----------------------
     @staticmethod
     def to_numpy(data):
         '''
@@ -135,10 +165,12 @@ class VinosDBL:
         else:
             return data
 
-    # ================================= Para carga de datos
+    # =================================
+    # Metodos para carga de datos
+    # =================================
     def simple_mysql_save(self, query, data):
         '''
-        Funci髇 gen閞ica para almacenar datos en una DB.
+        Funci贸n gen茅rica para almacenar datos en una DB.
         :param query: Str.
         :param data: Array.
         :return: Boolean.
@@ -163,65 +195,61 @@ class VinosDBL:
             cursor.close()
             return False
 
-    # -----------------------
     def new_vino(self, data):
         '''
-        Funci髇 que permite almacenar datos en la tabla 'vinos'.
+        Funci贸n que permite almacenar datos en la tabla 'vinos'.
         :param data: Array.
                 - Line format:  [nombre(str), tipo(str), vina(str), valle(str), ano(str), descripcion(str)]
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
         '''
-        if self.is_table('vinos'):
-            query = "insert into vinos (nombre, tipo, vina, valle, ano, descripcion) value ('%s', '%s', '%s', '%s', '%d', '%s')"
+        if self.is_table(u'vinos'):
+            query = u"insert into vinos (nombre, tipo, vina, valle, ano, descripcion) value ('%s', '%s', '%s', '%s', '%d', '%s')"
             # Carga de datos
             return self.simple_mysql_save(query, data)
         else:
-            print "*** ERROR: Table doesn't exists. ***"
+            print u"*** ERROR: Table doesn't exists. ***"
             return False
 
-    # -----------------------
     def new_estanque(self, data):
         '''
-        Funci髇 que permite almacenar datos en la tabla 'estanques'.
+        Funci贸n que permite almacenar datos en la tabla 'estanques'.
         :param data: Array.
                 - Line format:  [numero(int), descripcion(str)]
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
         '''
-        if self.is_table('estanques'):
-            query = "insert into estanques (numero, descripcion) value ('%d', '%s')"
+        if self.is_table(u'estanques'):
+            query = u"insert into estanques (numero, descripcion) value ('%d', '%s')"
             # Carga de datos
             return self.simple_mysql_save(query, data)
         else:
             print "*** ERROR: Table doesn't exists. ***"
             return False
 
-    # -----------------------
     def new_vino_in_estanque(self, data):
         '''
-        Funci髇 que permite almacenar datos en la tabla 'fechas_vinos', asociando temporalmente vinos y estanques.
+        Funci贸n que permite almacenar datos en la tabla 'fechas_vinos', asociando temporalmente vinos y estanques.
         :param data: Array.
                 - Line Format:  [estanques_id(int), vinos_id(int)]
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
         '''
-        if self.is_table('vinos') and self.is_table('estanques') and \
-           self.is_table('fechas_vinos'):
-            query = "insert into fechas_vinos (estanques_id, vinos_id) value ('%d', '%d')"
+        if self.is_table(u'vinos') and self.is_table(u'estanques') and \
+           self.is_table(u'fechas_vinos'):
+            query = u"insert into fechas_vinos (estanques_id, vinos_id) value ('%d', '%d')"
             # Carga de datos
             return self.simple_mysql_save(query, data)
         else:
-            print "*** ERROR: At least one of the tables required doesn't exists. ***"
+            print u"*** ERROR: At least one of the tables required doesn't exists. ***"
             return False
 
-    # -----------------------
     def new_parametro(self, parametros, espectro_id):
         '''
-        Funci髇 que permite almacenar datos en la tabla 'parametros', asoci醤dolos a un espectro determinado.
+        Funci贸n que permite almacenar datos en la tabla 'parametros', asoci谩ndolos a un espectro determinado.
         :param parametros: Array(float).
                 - Line Format: [SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad]
         :param espectro_id: Int.
@@ -229,10 +257,10 @@ class VinosDBL:
                 - True: Data stored correctly.
                 - False: Error.
         '''
-        if self.is_table('parametros'):
-            query = "insert into parametros " + \
-                    "(SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad, espectros_id) " + \
-                    "value ('%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d')"
+        if self.is_table(u'parametros'):
+            query = u"insert into parametros " + \
+                    u"(SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad, espectros_id) " + \
+                    u"value ('%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d')"
             # Preparar a data
             data = self.to_numpy(parametros)
             if data.ndim is 2:
@@ -242,14 +270,13 @@ class VinosDBL:
             # Carga de datos
             return self.simple_mysql_save(query, data)
         else:
-            print "*** ERROR: Table doesn't exists. ***"
+            print u"*** ERROR: Table doesn't exists. ***"
             return False
 
-    # -----------------------
     def new_espectro(self, filename, vino_id, estanque_id):
         '''
-        Funci髇 que permite almacenar datos en la tabla 'espectros' y registrar este ingreso en la tabla
-        'fechas_espectros', registrandolo temporalmente y asoci醤dolo a un determinado vino/estanque.
+        Funci贸n que permite almacenar datos en la tabla 'espectros' y registrar este ingreso en la tabla
+        'fechas_espectros', registrandolo temporalmente y asoci谩ndolo a un determinado vino/estanque.
         :param filename: Str.
         :param vino_id:  Int.
         :param estanque_id: Int.
@@ -257,11 +284,11 @@ class VinosDBL:
                 - True: Data stored correctly.
                 - False: Error.
         '''
-        if self.is_table('vinos') and self.is_table('estanques') and self.is_table('espectros') and self.is_table('fechas_espectros'):
+        if self.is_table(u'vinos') and self.is_table(u'estanques') and self.is_table(u'espectros') and self.is_table(u'fechas_espectros'):
             # ----------
-            query1 = "insert into espectros (espectro, flag_procesado) value ('%s', '%d')"
-            query2 = "select last_insert_id()"
-            query3 = "insert into fechas_espectros (vinos_id, estanques_id, espectros_id) value ('%d', '%d', '%d')"
+            query1 = u"insert into espectros (espectro, flag_procesado) value ('%s', '%d')"
+            query2 = u"select last_insert_id()"
+            query3 = u"insert into fechas_espectros (vinos_id, estanques_id, espectros_id) value ('%d', '%d', '%d')"
             # ----------
             cursor = self.conn.cursor()
             try:
@@ -283,11 +310,12 @@ class VinosDBL:
                 cursor.close()
                 return False
         else:
-            print "*** ERROR: At least one of the tables required doesn't exists. ***"
+            print u"*** ERROR: At least one of the tables required doesn't exists. ***"
             return False
 
-####LALO
-    # =======================================
+    # =================================
+    # Metodos para recuperar datos
+    # =================================
     def simple_mysql_read(self, query, data):
         cursor = self.conn.cursor()
         try:
@@ -301,131 +329,94 @@ class VinosDBL:
             cursor.close()
             return None
 
-
-    # ================================
-
-
-    # ================================
     # Lee datos de tabla estanques
     def read_estanque(self, data):
-        if self.is_table('estanques'):
-            query = " select numero, descripcion from estanques " + \
-                    " where numero = '%d' "
+        if self.is_table(u'estanques'):
+            query = u" select numero, descripcion from estanques " + \
+                    u" where numero = '%d' "
             return self.simple_mysql_read(query, data)
         else:
-            print "*** ERROR: Table doesn't exists ***"
+            print u"*** ERROR: Table doesn't exists ***"
             return None
 
     # Leer datos desde tabla vinos
-    # Supuesto: Se accede a la tabla vinos por a駉s, nombre y tipo
+    # Supuesto: Se accede a la tabla vinos por a帽os, nombre y tipo
 
     def read_vino(self,metodo,data):
 
         initquery = " select * from vinos "
 
-        if self.is_table('vinos'):
+        if self.is_table(u'vinos'):
 
-            if metodo == 'ano':
+            if metodo == u'ano':
                 l = len(data)
                 if l > 1:
                     if l == 2:
-                        query = initquery + " where ano between %d and %d "
+                        query = initquery + u" where ano between %d and %d "
                     else:
 
-                        aux = "where ano = %d"
+                        aux = u"where ano = %d"
                         concat = initquery
                         for i in range(l):
                             concat += aux
-                            aux = " or ano = %d "
+                            aux = u" or ano = %d "
                         query = concat
                 else:
-                    query = initquery + " where ano = %d "
+                    query = initquery + u" where ano = %d "
 
-            elif metodo == 'nombre':
+            elif metodo == u'nombre':
                 l = len(data)
                 if l > 1:
 
-                    aux = " where nombre = '%s' "
+                    aux = u" where nombre = '%s' "
                     concat = initquery
                     for i in range(l):
                         concat += aux
-                        aux = " or nombre = '%s' "
+                        aux = u" or nombre = '%s' "
                     query = concat
 
                 else:
-                    query = initquery + " where nombre = '%s' "
+                    query = initquery + u" where nombre = '%s' "
 
-            elif metodo == 'tipo':
+            elif metodo == u'tipo':
 
                 l = len(data)
                 if l > 1:
 
-                    aux = " where tipo = '%s' "
+                    aux = u" where tipo = '%s' "
                     concat = initquery
                     for i in range(l):
                         concat += aux
-                        aux = " or tipo = '%s' "
+                        aux = u" or tipo = '%s' "
                     query = concat
 
                 else:
-                    query = initquery + " where tipo = '%s' "
+                    query = initquery + u" where tipo = '%s' "
 
             return self.simple_mysql_read(query, tuple(data))
         else:
-            print "*** ERROR: Table doesn't exists ***"
+            print u"*** ERROR: Table doesn't exists ***"
             return None
 
     # Leer datos desde tabla espectros
     # Supuestos:
     # HEADER
     # Fecha: Se leen IDs de tablas espectros, estanques, vinos
-    # Estanque: Se lee el n鷐ero del estanque
-    # Vino: Se lee el nombre, tipo y a駉 del vino
+    # Estanque: Se lee el n煤mero del estanque
+    # Vino: Se lee el nombre, tipo y a帽o del vino
     # DATA
     # Espectro: Se lee el espectro
-
-    '''def read_espectro(self, data):
-
-        select es.espectro, tk.numero, vn.nombre, vn.tipo, vn.ano
-        from fechas_espectros as fe
-        inner join espectros as es on es.id_espectro = fe.espectros_id
-        inner join vinos as vn on vn.id_vinos = fe.vinos_id
-        inner join estanques as tk on tk.id_estanques = fe.estanques_id
-
-        where fe.fecha between '2017-12-01' and '2017-12-02'
-        and es.flag_procesado = 0
-
-
-        return None'''
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #
+    # '''def read_espectro(self, data):
+    #
+    #     select es.espectro, tk.numero, vn.nombre, vn.tipo, vn.ano
+    #     from fechas_espectros as fe
+    #     inner join espectros as es on es.id_espectro = fe.espectros_id
+    #     inner join vinos as vn on vn.id_vinos = fe.vinos_id
+    #     inner join estanques as tk on tk.id_estanques = fe.estanques_id
+    #
+    #     where fe.fecha between '2017-12-01' and '2017-12-02'
+    #     and es.flag_procesado = 0
+    #
+    #
+    #     return None'''
