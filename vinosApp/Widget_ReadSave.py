@@ -415,11 +415,10 @@ class Ui_Form(QtGui.QWidget):
             file = open(path_temp + name, "r")
             datos = list(csv.reader(file, delimiter=','))
             n = len(datos[:])
-            X = np.zeros((n-1, 1))
-            Y = np.zeros((n-1, 1))
-            for i in range(0, n-1):
-                X[i] = float(datos[i+1][0])
-                Y[i] = float(datos[i+1][1])
+            y = np.zeros((n-3, 1))
+            for i in range(0, n-3):
+                y[i] = float(datos[i+3][0])
+
             ax = self.figure.add_subplot(111)
             ax.clear()
             ax.spines["top"].set_visible(False)
@@ -428,7 +427,7 @@ class Ui_Form(QtGui.QWidget):
             ax.get_yaxis().tick_left()
             ax.set_xlabel("Frecuencia [Hz]", fontsize=12)
             ax.set_ylabel("Amplitud", fontsize=12)
-            ax.plot(X, np.flipud(Y), color='g')
+            ax.plot(np.flipud(y), color='g')
             ax.axis('tight')
             self.figure.set_facecolor('white')
             self.graphics_view.draw()
@@ -484,8 +483,33 @@ class Ui_Form(QtGui.QWidget):
 ####    else:
 ####        print u'No item selected/available!
 
-
-
+####   def plotEspectro(self):
+####       path_temp = "../data/Temporal/"
+####       itemTotal = self.model.rowCount(self)
+####       itemIndex = self.combobox_plot.currentIndex()
+####       if itemTotal is not 0 and itemIndex is not -1:
+####           name = self.model.consultData(itemIndex)
+####           file = open(path_temp + name, "r")
+####           datos = list(csv.reader(file, delimiter=','))
+####           n = len(datos[:])
+####           X = np.zeros((n-1, 1))
+####           Y = np.zeros((n-1, 1))
+####           for i in range(0, n-1):
+####               X[i] = float(datos[i+1][0])
+####               Y[i] = float(datos[i+1][1])
+####           ax = self.figure.add_subplot(111)
+####           ax.clear()
+####           ax.spines["top"].set_visible(False)
+####           ax.spines["right"].set_visible(False)
+####           ax.get_xaxis().tick_bottom()
+####           ax.get_yaxis().tick_left()
+####           ax.set_xlabel("Frecuencia [Hz]", fontsize=12)
+####           ax.set_ylabel("Amplitud", fontsize=12)
+####           ax.plot(X, np.flipud(Y), color='g')
+####           ax.axis('tight')
+####           self.figure.set_facecolor('white')
+####           self.graphics_view.draw()
+####           self.figure.tight_layout()
 
 
 
