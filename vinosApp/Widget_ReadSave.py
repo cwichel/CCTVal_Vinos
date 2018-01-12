@@ -324,8 +324,13 @@ class Ui_Form(QtGui.QWidget):
         self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
         self.listview_read.selectionModel().selectionChanged.connect(lambda: self.listread2comboboxplot())
         self.combobox_plot.activated.connect(lambda: self.combobox_plotHandler())
-
         self.combobox_plot.activated.connect(lambda: self.plotEspectro())
+        self.ventanacompleta.currentChanged.connect(lambda: self.plotEspectro())
+
+
+    def resizeEvent(self, event):
+        if self.figure.get_axes():
+            self.figure.tight_layout()
 
     def boton_estadoHandler(self, tankName):
         tankName = int(tankName)
@@ -349,6 +354,8 @@ class Ui_Form(QtGui.QWidget):
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
         path_read = "../data/Espectros/*.txt"
         path_temp = "../data/Temporal/"
+        if not os.path.isdir(path_temp):
+            os.mkdir(path_temp)
         files = glob.glob(path_read)
         temp = files[randint(1, len(files) - 1)]
         name = unicode(os.path.splitext(os.path.basename(temp))[0])
@@ -401,37 +408,34 @@ class Ui_Form(QtGui.QWidget):
 
     def plotEspectro(self):
         path_temp = "../data/Temporal/"
+        itemTotal = self.model.rowCount(self)
         itemIndex = self.combobox_plot.currentIndex()
-        name = self.model.consultData(itemIndex)
-        file = open(path_temp + name, "r")
-        datos = list(csv.reader(file, delimiter=','))
-        n = len(datos[:])
-        X = np.zeros((n-1, 1))
-        Y = np.zeros((n-1, 1))
-        for i in range(0, n-1):
-            frec = float(datos[i+1][0])
-            ampl = float(datos[i+1][1])
-            X[i] = frec
-            Y[i] = ampl
+        if itemTotal is not 0 and itemIndex is not -1:
+            name = self.model.consultData(itemIndex)
+            file = open(path_temp + name, "r")
+            datos = list(csv.reader(file, delimiter=','))
+            n = len(datos[:])
+            X = np.zeros((n-1, 1))
+            Y = np.zeros((n-1, 1))
+            for i in range(0, n-1):
+                X[i] = float(datos[i+1][0])
+                Y[i] = float(datos[i+1][1])
+            ax = self.figure.add_subplot(111)
+            ax.clear()
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+            ax.get_xaxis().tick_bottom()
+            ax.get_yaxis().tick_left()
+            ax.set_xlabel("Frecuencia [Hz]", fontsize=12)
+            ax.set_ylabel("Amplitud", fontsize=12)
+            ax.plot(X, np.flipud(Y), color='g')
+            ax.axis('tight')
+            self.figure.set_facecolor('white')
+            self.graphics_view.draw()
+            self.figure.tight_layout()
 
-        #ax = self.figure.add_subplot(111)
-        #ax.clear()
-        #ax.plot(X, Y)
-        #ax.set_xlabel('Frecuencia [Hz]')
-        #ax.set_ylabel('Magnitud [?]')
-        #ax.axis('tight')
-
-        ax = self.figure.add_subplot(111)
-        ax.clear()
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.get_xaxis().tick_bottom()
-        ax.get_yaxis().tick_left()
-        ax.set_xlabel("Frecuencia [Hz]", fontsize=14)
-        ax.set_ylabel("Amplitud", fontsize=14)
-        ax.plot(X, np.fliplr(Y), color='g')
-        ax.axis('tight')
-        self.graphics_view.draw()
+    def closeEvent(self, event):
+        self.boton_clearallHandler()
 
 
 
