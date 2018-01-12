@@ -11,17 +11,21 @@
 #pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
 ########################################################
 
-import sys
+
+
+import os
 import glob
+import csv
+import shutil
 import datetime
-import numpy as np
+
+from VinosDBL import *
+from QListModel import *
+from random import *
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
-from random import *
-from PyQt4 import QtCore, QtGui
-from VinosDBL import *
-from QListModel import *
+import matplotlib.pyplot as plt
 
 
 try:
@@ -54,7 +58,6 @@ class Ui_Form(QtGui.QWidget):
         self.model = ListModel([])
         self.initModels()
         self.setAction()
-        #self.win = pg.GraphicsWindow(title="Wiche")
 
 ##################################################################
 ################### Upgradeable de QtDesigner ####################
@@ -259,7 +262,7 @@ class Ui_Form(QtGui.QWidget):
 
         self.graphic = FigureCanvas(self.figure)
         self.graphics_view = NavigationToolbar(self.graphic, self)
-        self.graphics_view.setMinimumSize(QtCore.QSize(450, 25))
+        self.graphics_view.setMinimumSize(QtCore.QSize(450, 24))
         self.graphics_view.setObjectName(_fromUtf8("graphics_view"))
         self.verticalLayout_19.addWidget(self.graphics_view)
         self.verticalLayout_19.addWidget(self.graphic)
@@ -342,18 +345,28 @@ class Ui_Form(QtGui.QWidget):
                 self.display_estanques.append(u' %s' % desc[i])
 
     def boton_loadHandler(self):
-        ts = datetime.datetime.now().strftime(" - %Y-%m-%d %H:%M:%S")
-        path = "../data/Espectros/*.txt"
-        files = glob.glob(path)
-        temp = files[randint(1, len(files) - 1)] + ts
-        self.model.addNewValue(temp)
+        # cacho de copiar y renombrar
+        ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
+        path_read = "../data/Espectros/*.txt"
+        path_temp = "../data/Temporal/"
+        files = glob.glob(path_read)
+        temp = files[randint(1, len(files) - 1)]
+        name = unicode(os.path.splitext(os.path.basename(temp))[0])
+        shutil.copy2(temp, path_temp)
+        dst_name = 'Espectro'+' '+name+' '+ts+'.txt'
+        os.rename(path_temp+'/'+name+'.txt', path_temp+'/'+dst_name)
+        # agregar al modelo
+        self.model.addNewValue(dst_name)
         self.model.reset()
         self.listview_read.setCurrentIndex(self.model.index(0))
 
     def boton_clearselectHandler(self):
+        path_temp = "../data/Temporal/"
         itemIndex = self.listview_read.currentIndex().row()
         itemTotal = self.model.rowCount(None)
         if itemTotal is not 0 and itemIndex is not -1:
+            name = self.model.consultData(itemIndex)
+            os.remove(path_temp + name)
             self.model.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
             self.model.reset()
             if itemIndex > 0:
@@ -364,6 +377,10 @@ class Ui_Form(QtGui.QWidget):
             print u'No item selected/available!'
 
     def boton_clearallHandler(self):
+        path_temp = "../data/Temporal/*.txt"
+        files = glob.glob(path_temp)
+        for file in files:
+            os.remove(file)
         self.model.removeAllRows()
         self.model.reset()
 
@@ -383,16 +400,49 @@ class Ui_Form(QtGui.QWidget):
         self.combobox_plot.setCurrentIndex(itemIndex)
 
     def plotEspectro(self):
+        path_temp = "../data/Temporal/"
         itemIndex = self.combobox_plot.currentIndex()
-        data = self.model.consultData(itemIndex)
-
-        print data
-
+        name = self.model.consultData(itemIndex)
+        file = open(path_temp + name, "r")
+        datos = list(csv.reader(file, delimiter=','))
+        n = len(datos[:])
+        X = np.zeros((n-1, 1))
+        Y = np.zeros((n-1, 1))
+        for i in range(0, n-1):
+            frec = float(datos[i+1][0])
+            ampl = float(datos[i+1][1])
+            X[i] = frec
+            Y[i] = ampl
 
         #ax = self.figure.add_subplot(111)
         #ax.clear()
-        #ax.plot(data)
-        #self.graphics_view.draw()
+        #ax.plot(X, Y)
+        #ax.set_xlabel('Frecuencia [Hz]')
+        #ax.set_ylabel('Magnitud [?]')
+        #ax.axis('tight')
+
+        ax = self.figure.add_subplot(111)
+        ax.clear()
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.get_xaxis().tick_bottom()
+        ax.get_yaxis().tick_left()
+        ax.set_xlabel("Frecuencia [Hz]", fontsize=14)
+        ax.set_ylabel("Amplitud", fontsize=14)
+        ax.plot(X, np.fliplr(Y), color='g')
+        ax.axis('tight')
+        self.graphics_view.draw()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
