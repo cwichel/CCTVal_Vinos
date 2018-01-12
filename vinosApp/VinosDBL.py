@@ -2,6 +2,7 @@
 # =============================================================================
 # Modules
 # =============================================================================
+import sshtunnel
 import numpy as np
 import mysql.connector as msq
 from mysql.connector import errorcode
@@ -12,6 +13,7 @@ from mysql.connector import errorcode
 # =============================================================================
 class VinosDBL:
     def __init__(self):
+        self.isSSH = False
         self.data = []
         self.encoding = u'latin5'
         self.field_type = {
@@ -47,17 +49,44 @@ class VinosDBL:
     # =================================
     # Metodos de conexion
     # =================================
-    def connect(self, config):
+    def connect(self, dbConf, sshConf=None):
         '''
-        Función que permite conectarse a una base de datos.
-        :param config: dict.
+        Función que permite conectarse a una base de datos. Si sshConf es None, se conecta de forma directa,
+        en caso contrario utiliza el tunel ssh.
+        :param dbConf:  diccionario con:    'dbHost', 'dbPort', 'dbUser', 'dbPass', dbName'
+        :param sshConf: diccionario con:    'sshHost', 'sshPort', 'sshUser', 'sshPass', 'localHost', 'localPort'
         :return: Boolean.
                 - True: Connection succeeded.
                 - False: Error.
         '''
         try:
-            config[u'charset'] = self.encoding
-            self.conn = msq.connect(**config)
+            if sshConf is not None:
+                self.server = sshtunnel.SSHTunnelForwarder(
+                    ssh_address_or_host=(sshConf[u'sshHost'], sshConf[u'sshPort']),
+                    remote_bind_address=(dbConf[u'dbHost'], dbConf[u'dbPort']),
+                    local_bind_address=(sshConf[u'localHost'], sshConf[u'localPort']),
+                    ssh_username=sshConf[u'sshUser'],
+                    ssh_password=sshConf[u'sshPass']
+                    )
+                self.server.start()
+                self.conn = msq.connect(
+                    host=self.server.local_bind_host,
+                    port=self.server.local_bind_port,
+                    user=dbConf[u'dbUser'],
+                    passwd=dbConf[u'dbPass'],
+                    db=dbConf[u'dbName'],
+                    charset=self.encoding
+                    )
+                self.isSSH = True
+            else:
+                self.conn = msq.connect(
+                    host=dbConf[u'dbHost'],
+                    port=dbConf[u'dbPort'],
+                    user=dbConf[u'dbUser'],
+                    passwd=dbConf[u'dbPass'],
+                    db=dbConf[u'dbName'],
+                    charset=self.encoding
+                )
             return True
         except msq.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -77,6 +106,8 @@ class VinosDBL:
         '''
         try:
             self.conn.close()
+            if self.isSSH:
+                self.server.stop()
             return True
         except:
             print u"*** ERROR: No connection to close. ***"
