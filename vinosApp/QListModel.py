@@ -51,3 +51,6 @@ class ListModel(QtCore.QAbstractListModel):
 
     def consultData(self, index):
         return self.__files[index]
+
+    def consultItem(self, item):
+        return item in self.__files

@@ -449,5 +449,4 @@ class VinosDBL:
     #     where fe.fecha between '2017-12-01' and '2017-12-02'
     #     and es.flag_procesado = 0
     #
-    #
     #     return None'''

@@ -91,5 +91,5 @@ dependencies:
     - pycparser==2.18
     - pynacl==1.2.1
     - sshtunnel==0.1.2
-prefix: C:\Anaconda\envs\PVinos
+
 
