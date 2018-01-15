@@ -339,6 +339,7 @@ class Ui_Form(QtGui.QWidget):
         self.ventanacompleta.currentChanged.connect(lambda: self.plotEspectro())
         self.boton_selecttosave.clicked.connect(lambda: self.boton_selecttosaveHandler())
         self.boton_clearsave.clicked.connect(lambda: self.boton_clearsaveHandler())
+        self.boton_save.clicked.connect(lambda: self.boton_saveHandler())
 
 
     def resizeEvent(self, event):
@@ -366,7 +367,7 @@ class Ui_Form(QtGui.QWidget):
         # cacho de copiar y renombrar
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
         path_read = "../data/Espectros/*.txt"
-        path_temp = "../data/Temporal/"
+        path_temp = "../data/Temporal_Load"
         if not os.path.isdir(path_temp):
             os.mkdir(path_temp)
         files = glob.glob(path_read)
@@ -381,7 +382,7 @@ class Ui_Form(QtGui.QWidget):
         self.listview_read.setCurrentIndex(self.model_read.index(0))
 
     def boton_clearselectHandler(self):
-        path_temp = "../data/Temporal/"
+        path_temp = "../data/Temporal_Load/"
         itemIndex = self.listview_read.currentIndex().row()
         itemTotal = self.model_read.rowCount(None)
         if itemTotal is not 0 and itemIndex is not -1:
@@ -397,12 +398,15 @@ class Ui_Form(QtGui.QWidget):
             print u'No item selected/available!'
 
     def boton_clearallHandler(self):
-        path_temp = "../data/Temporal/*.txt"
-        files = glob.glob(path_temp)
-        for file in files:
-            os.remove(file)
-        self.model_read.removeAllRows()
+        path_temp = "../data/Temporal_Load/"
+        for i in range(0,self.model_read.rowCount(None)):
+            item = self.model_read.consultData(i)
+            if not self.model_save.consultItem(item):
+                os.remove(path_temp + item)
+                itemIndex = self.model_read.__files.index(unicode(item))
+                self.model_read.removeRows(itemIndex,1)
         self.model_read.reset()
+
 
     def combobox_plotHandler(self):
         itemIndex = self.combobox_plot.currentIndex()
@@ -420,7 +424,7 @@ class Ui_Form(QtGui.QWidget):
         self.combobox_plot.setCurrentIndex(itemIndex)
 
     def plotEspectro(self):
-        path_temp = "../data/Temporal/"
+        path_temp = "../data/Temporal_Load/"
         itemTotal = self.model_read.rowCount(self)
         itemIndex = self.combobox_plot.currentIndex()
         if itemTotal is not 0 and itemIndex is not -1:
@@ -448,13 +452,27 @@ class Ui_Form(QtGui.QWidget):
     def closeEvent(self, event):
         self.boton_clearallHandler()
 
+##########################################################
+##################    save to DB    ######################
+##########################################################
+
     def boton_selecttosaveHandler(self):
         itemTotal = self.model_read.rowCount(self)
-        itemIndex = self.combobox_plot.currentIndex()
+        itemIndex = self.listview_read.currentIndex().row()
         if itemTotal is not 0 and itemIndex is not -1:
-
+            # #copiar hacia carpeta Temporal_Save
+            # path_read = "../data/Temporal_Load/*.txt"
+            # path_temp = "../data/Temporal_Save"
+            # if not os.path.isdir(path_temp):
+            #     os.mkdir(path_temp)
+            # files = glob.glob(path_read)
+            # temp = files[itemIndex]
+            # # name = unicode(os.path.splitext(os.path.basename(temp))[0])
+            # # print name
+            # shutil.copy2(temp, path_temp)
+            # # dst_name = 'Espectro' + ' ' + name + ' ' + ts + '.txt'
+            # # os.rename(path_temp + '/' + name + '.txt', path_temp + '/' + dst_name)
             name = self.model_read.consultData(itemIndex)
-
             if not self.model_save.consultItem(name):
                 self.model_save.addNewValue(name)
                 self.model_save.reset()
@@ -464,9 +482,28 @@ class Ui_Form(QtGui.QWidget):
         else:
             print u'Item no seleccionado/disponible!'
 
+    def boton_clearsaveHandler(self):
+        itemIndex = self.listview_save.currentIndex().row()
+        itemTotal = self.model_save.rowCount(None)
+        if itemTotal is not 0 and itemIndex is not -1:
+            self.model_save.removeRows(self.listview_save.currentIndex().row(), 1, QtCore.QModelIndex())
+            self.model_save.reset()
+            if itemIndex > 0:
+                self.listview_save.setCurrentIndex(self.model_save.index(itemIndex - 1))
+            else:
+                self.listview_save.setCurrentIndex(self.model_save.index(0))
+        else:
+            print u'No item selected/available!'
 
-    def boton_clearHandler(self):
+
+    def boton_saveHandler(self):
         pass
+        # itemIndex = self.listview_save.currentIndex().row()
+        # itemTotal = self.model_save.rowCount(None)
+        # if itemTotal is not 0 and itemIndex is not -1:
+
+
+
 
 
 
