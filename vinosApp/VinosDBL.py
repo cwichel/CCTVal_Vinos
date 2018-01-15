@@ -271,7 +271,7 @@ class VinosDBL:
         '''
         if self.is_table(u'vinos') and self.is_table(u'estanques') and \
            self.is_table(u'fechas_vinos'):
-            query = u"insert into fechas_vinos (estanques_id, vinos_id) value ('%d', '%d')"
+            query = u"insert into fechas_vinos (id_estanques, id_vinos) value ('%d', '%d')"
             # Carga de datos
             return self.simple_mysql_save(query, data)
         else:
@@ -290,7 +290,7 @@ class VinosDBL:
         '''
         if self.is_table(u'parametros'):
             query = u"insert into parametros " + \
-                    u"(SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad, espectros_id) " + \
+                    u"(SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad, id_espectros) " + \
                     u"value ('%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d')"
             # Preparar a data
             data = self.to_numpy(parametros)
@@ -319,7 +319,7 @@ class VinosDBL:
             # ----------
             query1 = u"insert into espectros (espectro, flag_procesado) value ('%s', '%d')"
             query2 = u"select last_insert_id()"
-            query3 = u"insert into fechas_espectros (vinos_id, estanques_id, espectros_id) value ('%d', '%d', '%d')"
+            query3 = u"insert into fechas_espectros (id_vinos, id_estanques, id_espectros) value ('%d', '%d', '%d')"
             # ----------
             cursor = self.conn.cursor()
             try:
