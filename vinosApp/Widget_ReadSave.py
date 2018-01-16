@@ -59,7 +59,6 @@ class Ui_Form(QtGui.QWidget):
         self.initModels()
         self.setAction()
 
-
 ##################################################################
 ################### Upgradeable de QtDesigner ####################
 ##################################################################
@@ -296,7 +295,6 @@ class Ui_Form(QtGui.QWidget):
         self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Visualizar),
                                         _translate("ReadSaveData", "Tab 2", None))
 
-
 ##################################################################
 ################### Desarrollo de Aplicacion #####################
 ##################################################################
@@ -327,7 +325,6 @@ class Ui_Form(QtGui.QWidget):
         self.vinosDB.connect(dbConf=dbConf, sshConf=sshConf)
         #print self.vinosDB.conn.is_connected()
 
-
     def setAction(self):
         self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
@@ -341,27 +338,35 @@ class Ui_Form(QtGui.QWidget):
         self.boton_clearsave.clicked.connect(lambda: self.boton_clearsaveHandler())
         self.boton_save.clicked.connect(lambda: self.boton_saveHandler())
 
-
     def resizeEvent(self, event):
         if self.figure.get_axes():
             self.figure.tight_layout()
 
     def boton_estadoHandler(self, tankName):
-        tankName = int(tankName)
-        data = self.vinosDB.read_estanque(tankName)
-        self.display_row1(data, tankName)
-
-    def display_row1(self, data, tankName):
-        self.display_estanques.clear()
-        if not data:
-            error = u'*** ERROR: Estanque N° %d No Existe***' % tankName
-            self.display_estanques.append(u' %s' % error)
+        if not tankName:
+            data = u'*** ERROR: No ha ingresado número de estanque ***'
+            flag = 1
+            self.display_row1(data, tankName, flag)
         else:
-            num = data[0][0]
-            desc = data[0][1].split(u', ')
-            self.display_estanques.append(u' Estanque número: %s \t ' % num)
-            for i in range(len(desc)):
-                self.display_estanques.append(u' %s' % desc[i])
+            flag = 0
+            tankName = int(tankName)
+            data = self.vinosDB.read_estanque(tankName)
+            self.display_row1(data, tankName, flag)
+
+    def display_row1(self, data, tankName, flag):
+        self.display_estanques.clear()
+        if flag == False:
+            if not data:
+                error = u'*** ERROR: Estanque N° %d No Existe***' % tankName
+                self.display_estanques.append(u' %s' % error)
+            else:
+                num = data[0][0]
+                desc = data[0][1].split(u', ')
+                self.display_estanques.append(u' Estanque número: %s \t ' % num)
+                for i in range(len(desc)):
+                    self.display_estanques.append(u' %s' % desc[i])
+        else:
+            self.display_estanques.append(u' %s' % data)
 
     def boton_loadHandler(self):
         # cacho de copiar y renombrar
@@ -477,18 +482,6 @@ class Ui_Form(QtGui.QWidget):
         itemTotal = self.model_read.rowCount(self)
         itemIndex = self.listview_read.currentIndex().row()
         if itemTotal is not 0 and itemIndex is not -1:
-            # #copiar hacia carpeta Temporal_Save
-            # path_read = "../data/Temporal_Load/*.txt"
-            # path_temp = "../data/Temporal_Save"
-            # if not os.path.isdir(path_temp):
-            #     os.mkdir(path_temp)
-            # files = glob.glob(path_read)
-            # temp = files[itemIndex]
-            # # name = unicode(os.path.splitext(os.path.basename(temp))[0])
-            # # print name
-            # shutil.copy2(temp, path_temp)
-            # # dst_name = 'Espectro' + ' ' + name + ' ' + ts + '.txt'
-            # # os.rename(path_temp + '/' + name + '.txt', path_temp + '/' + dst_name)
             name = self.model_read.consultData(itemIndex)
             if not self.model_save.consultItem(name):
                 self.model_save.addNewValue(name)
@@ -512,12 +505,42 @@ class Ui_Form(QtGui.QWidget):
         else:
             print u'No item selected/available!'
 
-
     def boton_saveHandler(self):
-        pass
-        # itemIndex = self.listview_save.currentIndex().row()
-        # itemTotal = self.model_save.rowCount(None)
-        # if itemTotal is not 0 and itemIndex is not -1:
+        tankName = self.linedit_estanquein.text()
+        if not tankName:
+            data = u'*** ERROR: No ha ingresado número de estanque *** \n ' \
+                   u'Debe ingresar estanque para almacenar espectro en base de datos!'
+            flag = 1
+            self.display_row1(data, tankName, flag)
+        else:
+            tankName = int(tankName)
+            path_temp = "../data/Temporal_Load/"
+            itemIndex = self.listview_save.currentIndex().row()
+            itemTotal = self.model_save.rowCount(None)
+            if itemTotal is not 0 and itemIndex is not -1:
+                if tankName is not None:
+                    data_estanque = self.vinosDB.read_estanque(tankName)
+                    id_estanque = data_estanque[0][2]
+                    data_vinos = self.vinosDB.read_fechavino(id_estanque)
+                    id_vino = data_vinos[0][1]
+                    item = self.model_save.model_list[itemIndex]
+                    filename = path_temp + item
+                    #self.vinosDB.new_espectro(filename, id_vino, id_estanque)
+                    itemIndexRead = self.model_read.model_list.index(item)
+                    self.model_save.removeRows(itemIndex, 1)
+                    self.model_read.removeRows(itemIndexRead, 1)
+                    os.remove(filename)
+            else:
+                print u'No ha seleccionado/adquirido espectro para guardar!'
+
+
+
+
+
+
+
+
+
 
 
 

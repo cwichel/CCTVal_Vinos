@@ -363,7 +363,7 @@ class VinosDBL:
     # Lee datos de tabla estanques
     def read_estanque(self, data):
         if self.is_table(u'estanques'):
-            query = u" select numero, descripcion from estanques " + \
+            query = u" select numero, descripcion, id_estanque from estanques " + \
                     u" where numero = '%d' "
             return self.simple_mysql_read(query, data)
         else:
@@ -372,8 +372,7 @@ class VinosDBL:
 
     # Leer datos desde tabla vinos
     # Supuesto: Se accede a la tabla vinos por años, nombre y tipo
-
-    def read_vino(self,metodo,data):
+    def read_vino(self, metodo, data):
 
         initquery = " select * from vinos "
 
@@ -428,6 +427,18 @@ class VinosDBL:
         else:
             print u"*** ERROR: Table doesn't exists ***"
             return None
+
+    def read_fechavino(self, data):
+        if self.is_table(u'fechas_vinos'):
+            query = u" select fecha, id_vinos from fechas_vinos " + \
+                    u" where id_estanques = '%d' "
+            return self.simple_mysql_read(query, data)
+        else:
+            print u"*** ERROR: Table doesn't exists ***"
+            return None
+
+
+
 
     # Leer datos desde tabla espectros
     # Supuestos:
