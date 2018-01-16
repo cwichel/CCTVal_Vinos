@@ -386,14 +386,18 @@ class Ui_Form(QtGui.QWidget):
         itemIndex = self.listview_read.currentIndex().row()
         itemTotal = self.model_read.rowCount(None)
         if itemTotal is not 0 and itemIndex is not -1:
-            name = self.model_read.consultData(itemIndex)
-            os.remove(path_temp + name)
-            self.model_read.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
-            self.model_read.reset()
-            if itemIndex > 0:
-                self.listview_read.setCurrentIndex(self.model_read.index(itemIndex-1))
+            item = self.model_read.consultData(itemIndex)
+            if item not in self.model_save.model_list:
+                name = self.model_read.consultData(itemIndex)
+                os.remove(path_temp + name)
+                self.model_read.removeRows(self.listview_read.currentIndex().row(), 1, QtCore.QModelIndex())
+                self.model_read.reset()
+                if itemIndex > 0:
+                    self.listview_read.setCurrentIndex(self.model_read.index(itemIndex-1))
+                else:
+                    self.listview_read.setCurrentIndex(self.model_read.index(0))
             else:
-                self.listview_read.setCurrentIndex(self.model_read.index(0))
+                print u'El item a eliminar ha sido seleccionado para guardar'
         else:
             print u'No item selected/available!'
 
@@ -455,7 +459,15 @@ class Ui_Form(QtGui.QWidget):
             self.figure.tight_layout()
 
     def closeEvent(self, event):
-        self.boton_clearallHandler()
+        path_temp = "../data/Temporal_Load/*.txt"
+        files = glob.glob(path_temp)
+        for file in files:
+            os.remove(file)
+        self.model_read.removeAllRows()
+        self.model_save.removeAllRows()
+        self.model_read.reset()
+        self.model_save.reset()
+        print 'chao C:'
 
 ##########################################################
 ##################    save to DB    ######################
