@@ -325,7 +325,7 @@ class Ui_Form(QtGui.QWidget):
         }
         #sshConf = None
         self.vinosDB.connect(dbConf=dbConf, sshConf=sshConf)
-        print self.vinosDB.conn.is_connected()
+        #print self.vinosDB.conn.is_connected()
 
 
     def setAction(self):
@@ -399,14 +399,19 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_clearallHandler(self):
         path_temp = "../data/Temporal_Load/"
-        for i in range(0,self.model_read.rowCount(None)):
-            item = self.model_read.consultData(i)
-            if not self.model_save.consultItem(item):
-                os.remove(path_temp + item)
-                itemIndex = self.model_read.__files.index(unicode(item))
-                self.model_read.removeRows(itemIndex,1)
+        aux_list = []
+        for item in self.model_read.model_list:
+            if item not in self.model_save.model_list:
+                itemIndex = self.model_read.model_list.index(item)
+                name = self.model_read.consultData(itemIndex)
+                os.remove(path_temp + name)
+            else:
+                aux_list.append(item)
+        self.model_read.model_list = aux_list
+        self.model_read.model_list.sort()
+        self.model_save.model_list.sort()
         self.model_read.reset()
-
+        self.model_save.reset()
 
     def combobox_plotHandler(self):
         itemIndex = self.combobox_plot.currentIndex()
