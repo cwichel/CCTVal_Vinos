@@ -436,28 +436,3 @@ class VinosDBL:
         else:
             print u"*** ERROR: Table doesn't exists ***"
             return None
-
-
-
-
-    # Leer datos desde tabla espectros
-    # Supuestos:
-    # HEADER
-    # Fecha: Se leen IDs de tablas espectros, estanques, vinos
-    # Estanque: Se lee el número del estanque
-    # Vino: Se lee el nombre, tipo y año del vino
-    # DATA
-    # Espectro: Se lee el espectro
-    #
-    # '''def read_espectro(self, data):
-    #
-    #     select es.espectro, tk.numero, vn.nombre, vn.tipo, vn.ano
-    #     from fechas_espectros as fe
-    #     inner join espectros as es on es.id_espectro = fe.espectros_id
-    #     inner join vinos as vn on vn.id_vinos = fe.vinos_id
-    #     inner join estanques as tk on tk.id_estanques = fe.estanques_id
-    #
-    #     where fe.fecha between '2017-12-01' and '2017-12-02'
-    #     and es.flag_procesado = 0
-    #
-    #     return None'''

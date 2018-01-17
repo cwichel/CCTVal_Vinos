@@ -13,8 +13,8 @@
 
 
 import os
-import glob
 import csv
+import glob
 import shutil
 import datetime
 
@@ -24,7 +24,6 @@ from random import *
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 
 
 try:
@@ -60,7 +59,7 @@ class Ui_Form(QtGui.QWidget):
         self.setAction()
 
 ##################################################################
-################### Upgradeable de QtDesigner ####################
+###################### UI de QtDesigner ##########################
 ##################################################################
 
     def setupUi(self, ReadSaveData):
@@ -248,12 +247,9 @@ class Ui_Form(QtGui.QWidget):
         self.label_3.setObjectName(_fromUtf8("label_3"))
 
         #########################################################
-
-        # self.verticalLayout_19.addWidget(self.label_3)
-        # self.graphics_view = QtGui.QGraphicsView(self.Visualizar)
-        # self.graphics_view.setMinimumSize(QtCore.QSize(450, 145))
-        # self.graphics_view.setObjectName(_fromUtf8("graphics_view"))
-        # self.verticalLayout_19.addWidget(self.graphics_view)
+        ### Se modifica el archivo diseñado en QtDesigner para
+        ### incluir clase figure para graficar espectros
+        #########################################################
 
         self.verticalLayout_19.addWidget(self.label_3)
         self.graphic = FigureCanvas(self.figure)
@@ -305,7 +301,7 @@ class Ui_Form(QtGui.QWidget):
         self.listview_save.setModel(self.model_save)
 
     def databaseConnect(self):
-        # Para servidor local:
+        # Para servidor de base de datos
         dbConf = {
             u'dbHost': u'127.0.0.1',
             u'dbPort': 3306,
@@ -321,9 +317,8 @@ class Ui_Form(QtGui.QWidget):
             u'localHost': u'127.0.0.1',
             u'localPort': 3037
         }
-        #sshConf = None
         self.vinosDB.connect(dbConf=dbConf, sshConf=sshConf)
-        #print self.vinosDB.conn.is_connected()
+        print u'Conectado a Base de Datos:', self.vinosDB.conn.is_connected()
 
     def setAction(self):
         self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
@@ -369,7 +364,6 @@ class Ui_Form(QtGui.QWidget):
             self.display_estanques.append(u' %s' % data)
 
     def boton_loadHandler(self):
-        # cacho de copiar y renombrar
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
         path_read = "../data/Espectros/*.txt"
         path_temp = "../data/Temporal_Load"
@@ -381,7 +375,6 @@ class Ui_Form(QtGui.QWidget):
         shutil.copy2(temp, path_temp)
         dst_name = 'Espectro'+' '+name+' '+ts+'.txt'
         os.rename(path_temp+'/'+name+'.txt', path_temp+'/'+dst_name)
-        # agregar al modelo
         self.model_read.addNewValue(dst_name)
         self.model_read.reset()
         self.listview_read.setCurrentIndex(self.model_read.index(0))
@@ -463,19 +456,6 @@ class Ui_Form(QtGui.QWidget):
             self.graphics_view.draw()
             self.figure.tight_layout()
 
-    def closeEvent(self, event):
-        path_temp = "../data/Temporal_Load/*.txt"
-        files = glob.glob(path_temp)
-        for file in files:
-            os.remove(file)
-        self.model_read.removeAllRows()
-        self.model_save.removeAllRows()
-        # self.model_read.reset()
-        # self.model_save.reset()
-        self.close()
-        print 'chao C:'
-
-
 ##########################################################
 ##################    save to DB    ######################
 ##########################################################
@@ -535,9 +515,17 @@ class Ui_Form(QtGui.QWidget):
             else:
                 print u'No ha seleccionado/adquirido espectro para guardar!'
 
-
-
-
+    def closeEvent(self, event):
+        path_temp = "../data/Temporal_Load/*.txt"
+        files = glob.glob(path_temp)
+        for file in files:
+            os.remove(file)
+        self.model_read.removeAllRows()
+        self.model_save.removeAllRows()
+        self.model_read.reset()
+        self.model_save.reset()
+        self.destroy()
+        self.close()
 
 
 
