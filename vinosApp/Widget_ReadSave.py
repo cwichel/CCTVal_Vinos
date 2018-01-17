@@ -470,9 +470,11 @@ class Ui_Form(QtGui.QWidget):
             os.remove(file)
         self.model_read.removeAllRows()
         self.model_save.removeAllRows()
-        self.model_read.reset()
-        self.model_save.reset()
+        # self.model_read.reset()
+        # self.model_save.reset()
+        self.close()
         print 'chao C:'
+
 
 ##########################################################
 ##################    save to DB    ######################
@@ -525,7 +527,7 @@ class Ui_Form(QtGui.QWidget):
                     id_vino = data_vinos[0][1]
                     item = self.model_save.model_list[itemIndex]
                     filename = path_temp + item
-                    #self.vinosDB.new_espectro(filename, id_vino, id_estanque)
+                    self.vinosDB.new_espectro(filename, id_vino, id_estanque)
                     itemIndexRead = self.model_read.model_list.index(item)
                     self.model_save.removeRows(itemIndex, 1)
                     self.model_read.removeRows(itemIndexRead, 1)
