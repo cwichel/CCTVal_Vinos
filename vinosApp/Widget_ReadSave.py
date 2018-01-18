@@ -34,11 +34,14 @@ except AttributeError:
 
 try:
     _encoding = QtGui.QApplication.UnicodeUTF8
+
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig, _encoding)
+
 except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
+
 
 class Ui_Form(QtGui.QWidget):
 
@@ -366,6 +369,7 @@ class Ui_Form(QtGui.QWidget):
     def boton_loadHandler(self):
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
         path_read = "../data/Espectros/*.txt"
+        # path_read = "../data/Espectros Vinos/*.txt"
         path_temp = "../data/Temporal_Load"
         if not os.path.isdir(path_temp):
             os.mkdir(path_temp)
@@ -456,6 +460,34 @@ class Ui_Form(QtGui.QWidget):
             self.graphics_view.draw()
             self.figure.tight_layout()
 
+    # def plotEspectro(self):
+    #     path_temp = "../data/Temporal_Load/"
+    #     itemTotal = self.model_read.rowCount(self)
+    #     itemIndex = self.combobox_plot.currentIndex()
+    #     if itemTotal is not 0 and itemIndex is not -1:
+    #         name = self.model_read.consultData(itemIndex)
+    #         file = open(path_temp + name, "r")
+    #         datos = list(csv.reader(file, delimiter=','))
+    #         n = len(datos[:])
+    #         y = np.zeros((n-1, 1))
+    #         x = np.zeros((n - 1, 1))
+    #         for i in range(0, n-1):
+    #             y[i] = float(datos[i+1][1])
+    #             x[i] = float(datos[i+1][0])
+    #         ax = self.figure.add_subplot(111)
+    #         ax.clear()
+    #         ax.spines["top"].set_visible(False)
+    #         ax.spines["right"].set_visible(False)
+    #         ax.get_xaxis().tick_bottom()
+    #         ax.get_yaxis().tick_left()
+    #         ax.set_xlabel("Frecuencia [Hz]", fontsize=12)
+    #         ax.set_ylabel("Amplitud", fontsize=12)
+    #         ax.plot(x, np.flipud(y), color='g')
+    #         ax.axis('tight')
+    #         self.figure.set_facecolor('white')
+    #         self.graphics_view.draw()
+    #         self.figure.tight_layout()
+
 ##########################################################
 ##################    save to DB    ######################
 ##########################################################
@@ -507,7 +539,7 @@ class Ui_Form(QtGui.QWidget):
                     id_vino = data_vinos[0][1]
                     item = self.model_save.model_list[itemIndex]
                     filename = path_temp + item
-                    self.vinosDB.new_espectro(filename, id_vino, id_estanque)
+                    #self.vinosDB.new_espectro(filename, id_vino, id_estanque)
                     itemIndexRead = self.model_read.model_list.index(item)
                     self.model_save.removeRows(itemIndex, 1)
                     self.model_read.removeRows(itemIndexRead, 1)
@@ -524,83 +556,5 @@ class Ui_Form(QtGui.QWidget):
         self.model_save.removeAllRows()
         self.model_read.reset()
         self.model_save.reset()
-        self.destroy()
+        self.vinosDB.close()
         self.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# implementacion tonta
-####def boton_clearallHandler(self):
-####    self.modelList = []
-####    model = ListModel(self.modelList)
-####    self.listview_read.setModel(model)
-
-####def boton_loadHandler(self):###
-####    ts = datetime.datetime.now().strftime(" - %Y-%m-%d %H:%M:%S")
-####    path = "../data/Espectros/*.txt"
-####    files = glob.glob(path)
-####    temp = files[randint(1, len(files)-1)] + ts
-####    self.modelList.append(temp)
-####    model = ListModel(self.modelList)
-####    self.listview_read.setModel(model)
-
-####def boton_clearselectHandler(self):
-####    itemIndex = self.listview_read.currentIndex().row()
-####    itemTotal = len(self.modelList)
-####    if itemTotal is not 0 and itemIndex is not -1:
-####        print u'Modifying item...'
-####        del self.modelList[itemIndex]
-####        model = ListModel(self.modelList)
-####        self.listview_read.setModel(model)
-####    else:
-####        print u'No item selected/available!
-
-####   def plotEspectro(self):
-####       path_temp = "../data/Temporal/"
-####       itemTotal = self.model.rowCount(self)
-####       itemIndex = self.combobox_plot.currentIndex()
-####       if itemTotal is not 0 and itemIndex is not -1:
-####           name = self.model.consultData(itemIndex)
-####           file = open(path_temp + name, "r")
-####           datos = list(csv.reader(file, delimiter=','))
-####           n = len(datos[:])
-####           X = np.zeros((n-1, 1))
-####           Y = np.zeros((n-1, 1))
-####           for i in range(0, n-1):
-####               X[i] = float(datos[i+1][0])
-####               Y[i] = float(datos[i+1][1])
-####           ax = self.figure.add_subplot(111)
-####           ax.clear()
-####           ax.spines["top"].set_visible(False)
-####           ax.spines["right"].set_visible(False)
-####           ax.get_xaxis().tick_bottom()
-####           ax.get_yaxis().tick_left()
-####           ax.set_xlabel("Frecuencia [Hz]", fontsize=12)
-####           ax.set_ylabel("Amplitud", fontsize=12)
-####           ax.plot(X, np.flipud(Y), color='g')
-####           ax.axis('tight')
-####           self.figure.set_facecolor('white')
-####           self.graphics_view.draw()
-####           self.figure.tight_layout()

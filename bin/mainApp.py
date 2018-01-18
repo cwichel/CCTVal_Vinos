@@ -15,6 +15,3 @@ if __name__ == '__main__':
     exe = Ui_Form()
     exe.show()
     sys.exit(app.exec_())
-
-
-
