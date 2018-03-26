@@ -23,11 +23,9 @@ except AttributeError:
         return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_ReadSaveData(object):
-
-
     def setupUi(self, ReadSaveData):
         ReadSaveData.setObjectName(_fromUtf8("ReadSaveData"))
-        ReadSaveData.resize(692, 430)
+        ReadSaveData.resize(692, 378)
         ReadSaveData.setMinimumSize(QtCore.QSize(550, 350))
         self.horizontalLayout_2 = QtGui.QHBoxLayout(ReadSaveData)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
@@ -223,7 +221,7 @@ class Ui_ReadSaveData(object):
         QtCore.QMetaObject.connectSlotsByName(ReadSaveData)
 
     def retranslateUi(self, ReadSaveData):
-        ReadSaveData.setWindowTitle(_translate("ReadSaveData", "Form", None))
+        ReadSaveData.setWindowTitle(_translate("ReadSaveData", "Adquisición y Visualización Espectros", None))
         self.label_estanque.setText(_translate("ReadSaveData", "  N° Estanque \n"
 " a Analizar", None))
         self.boton_estado.setText(_translate("ReadSaveData", "Verificar", None))

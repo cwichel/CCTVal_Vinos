@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Lalo</author>
  <class>ReadSaveData</class>
  <widget class="QWidget" name="ReadSaveData">
   <property name="geometry">
@@ -7,7 +8,7 @@
     <x>0</x>
     <y>0</y>
     <width>692</width>
-    <height>430</height>
+    <height>378</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -17,7 +18,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Adquisición y Visualización Espectros</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>

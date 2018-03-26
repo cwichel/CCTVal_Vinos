@@ -66,13 +66,13 @@ class Ui_Form(QtGui.QWidget):
 
     def setupUi(self, ReadSaveData):
         ReadSaveData.setObjectName(_fromUtf8("ReadSaveData"))
-        ReadSaveData.resize(692, 430)
+        ReadSaveData.resize(692, 378)
         ReadSaveData.setMinimumSize(QtCore.QSize(550, 350))
         self.horizontalLayout_2 = QtGui.QHBoxLayout(ReadSaveData)
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
-        self.ventanacompleta = QtGui.QTabWidget(ReadSaveData)
-        self.ventanacompleta.setMinimumSize(QtCore.QSize(450, 300))
-        self.ventanacompleta.setObjectName(_fromUtf8("ventanacompleta"))
+        self.Tabs = QtGui.QTabWidget(ReadSaveData)
+        self.Tabs.setMinimumSize(QtCore.QSize(450, 300))
+        self.Tabs.setObjectName(_fromUtf8("Tabs"))
         self.Adquirir = QtGui.QWidget()
         self.Adquirir.setMinimumSize(QtCore.QSize(400, 300))
         self.Adquirir.setObjectName(_fromUtf8("Adquirir"))
@@ -142,7 +142,7 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_9.setSpacing(8)
         self.verticalLayout_9.setObjectName(_fromUtf8("verticalLayout_9"))
         self.listview_read = QtGui.QListView(self.groupBox)
-        self.listview_read.setMinimumSize(QtCore.QSize(220, 90))
+        self.listview_read.setMinimumSize(QtCore.QSize(220, 70))
         self.listview_read.setMaximumSize(QtCore.QSize(1500, 150))
         self.listview_read.setObjectName(_fromUtf8("listview_read"))
         self.verticalLayout_9.addWidget(self.listview_read, QtCore.Qt.AlignHCenter)
@@ -152,7 +152,7 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_14 = QtGui.QVBoxLayout()
         self.verticalLayout_14.setObjectName(_fromUtf8("verticalLayout_14"))
         self.boton_load = QtGui.QPushButton(self.groupBox)
-        self.boton_load.setMinimumSize(QtCore.QSize(95, 70))
+        self.boton_load.setMinimumSize(QtCore.QSize(95, 60))
         self.boton_load.setMaximumSize(QtCore.QSize(95, 70))
         self.boton_load.setObjectName(_fromUtf8("boton_load"))
         self.verticalLayout_14.addWidget(self.boton_load, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
@@ -160,12 +160,12 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_12 = QtGui.QVBoxLayout()
         self.verticalLayout_12.setObjectName(_fromUtf8("verticalLayout_12"))
         self.boton_clearall = QtGui.QPushButton(self.groupBox)
-        self.boton_clearall.setMinimumSize(QtCore.QSize(95, 30))
+        self.boton_clearall.setMinimumSize(QtCore.QSize(95, 25))
         self.boton_clearall.setMaximumSize(QtCore.QSize(140, 30))
         self.boton_clearall.setObjectName(_fromUtf8("boton_clearall"))
         self.verticalLayout_12.addWidget(self.boton_clearall, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.boton_clearselect = QtGui.QPushButton(self.groupBox)
-        self.boton_clearselect.setMinimumSize(QtCore.QSize(95, 30))
+        self.boton_clearselect.setMinimumSize(QtCore.QSize(95, 25))
         self.boton_clearselect.setMaximumSize(QtCore.QSize(140, 30))
         self.boton_clearselect.setObjectName(_fromUtf8("boton_clearselect"))
         self.verticalLayout_12.addWidget(self.boton_clearselect, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
@@ -183,7 +183,7 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_15 = QtGui.QVBoxLayout()
         self.verticalLayout_15.setObjectName(_fromUtf8("verticalLayout_15"))
         self.listview_save = QtGui.QListView(self.groupBox_2)
-        self.listview_save.setMinimumSize(QtCore.QSize(220, 90))
+        self.listview_save.setMinimumSize(QtCore.QSize(220, 70))
         self.listview_save.setMaximumSize(QtCore.QSize(1500, 150))
         self.listview_save.setObjectName(_fromUtf8("listview_save"))
         self.verticalLayout_15.addWidget(self.listview_save)
@@ -193,12 +193,12 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_20 = QtGui.QVBoxLayout()
         self.verticalLayout_20.setObjectName(_fromUtf8("verticalLayout_20"))
         self.boton_selecttosave = QtGui.QPushButton(self.groupBox_2)
-        self.boton_selecttosave.setMinimumSize(QtCore.QSize(95, 30))
+        self.boton_selecttosave.setMinimumSize(QtCore.QSize(95, 25))
         self.boton_selecttosave.setMaximumSize(QtCore.QSize(140, 30))
         self.boton_selecttosave.setObjectName(_fromUtf8("boton_selecttosave"))
         self.verticalLayout_20.addWidget(self.boton_selecttosave, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.boton_clearsave = QtGui.QPushButton(self.groupBox_2)
-        self.boton_clearsave.setMinimumSize(QtCore.QSize(95, 30))
+        self.boton_clearsave.setMinimumSize(QtCore.QSize(95, 25))
         self.boton_clearsave.setMaximumSize(QtCore.QSize(140, 30))
         self.boton_clearsave.setObjectName(_fromUtf8("boton_clearsave"))
         self.verticalLayout_20.addWidget(self.boton_clearsave, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
@@ -206,7 +206,7 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_16 = QtGui.QVBoxLayout()
         self.verticalLayout_16.setObjectName(_fromUtf8("verticalLayout_16"))
         self.boton_save = QtGui.QPushButton(self.groupBox_2)
-        self.boton_save.setMinimumSize(QtCore.QSize(95, 70))
+        self.boton_save.setMinimumSize(QtCore.QSize(95, 60))
         self.boton_save.setMaximumSize(QtCore.QSize(95, 70))
         self.boton_save.setObjectName(_fromUtf8("boton_save"))
         self.verticalLayout_16.addWidget(self.boton_save, QtCore.Qt.AlignHCenter)
@@ -216,7 +216,7 @@ class Ui_Form(QtGui.QWidget):
         self.horizontalLayout_8.addWidget(self.groupBox_2, QtCore.Qt.AlignHCenter)
         self.verticalLayout_8.addLayout(self.horizontalLayout_8)
         self.verticalLayout_5.addLayout(self.verticalLayout_8)
-        self.ventanacompleta.addTab(self.Adquirir, _fromUtf8(""))
+        self.Tabs.addTab(self.Adquirir, _fromUtf8(""))
         self.Visualizar = QtGui.QWidget()
         self.Visualizar.setMinimumSize(QtCore.QSize(400, 300))
         self.Visualizar.setObjectName(_fromUtf8("Visualizar"))
@@ -247,7 +247,6 @@ class Ui_Form(QtGui.QWidget):
         self.label_3.setMinimumSize(QtCore.QSize(250, 25))
         self.label_3.setMaximumSize(QtCore.QSize(400, 25))
         self.label_3.setObjectName(_fromUtf8("label_3"))
-
         #########################################################
         ### Se modifica el archivo diseñado en QtDesigner para
         ### incluir clase figure para graficar espectros
@@ -265,15 +264,15 @@ class Ui_Form(QtGui.QWidget):
 
         self.verticalLayout_18.addLayout(self.verticalLayout_19)
         self.verticalLayout.addLayout(self.verticalLayout_18)
-        self.ventanacompleta.addTab(self.Visualizar, _fromUtf8(""))
-        self.horizontalLayout_2.addWidget(self.ventanacompleta)
+        self.Tabs.addTab(self.Visualizar, _fromUtf8(""))
+        self.horizontalLayout_2.addWidget(self.Tabs)
 
         self.retranslateUi(ReadSaveData)
-        self.ventanacompleta.setCurrentIndex(0)
+        self.Tabs.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(ReadSaveData)
 
     def retranslateUi(self, ReadSaveData):
-        ReadSaveData.setWindowTitle(_translate("ReadSaveData", "Form", None))
+        ReadSaveData.setWindowTitle(_translate("ReadSaveData", "Adquisición y Visualización Espectros", None))
         self.label_estanque.setText(_translate("ReadSaveData", "  N° Estanque \n"
                                                                " a Analizar", None))
         self.boton_estado.setText(_translate("ReadSaveData", "Verificar", None))
@@ -286,16 +285,11 @@ class Ui_Form(QtGui.QWidget):
         self.boton_clearsave.setText(_translate("ReadSaveData", "Clear Select", None))
         self.boton_save.setText(_translate("ReadSaveData", "Guardar a\n"
                                                            " Base de Datos", None))
-        self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Adquirir),
-                                        _translate("ReadSaveData", "Tab 1", None))
+        self.Tabs.setTabText(self.Tabs.indexOf(self.Adquirir), _translate("ReadSaveData", "Adquirir", None))
         self.label_comboboxplot.setText(_translate("ReadSaveData", "Espectros Adquiridos", None))
         self.label_3.setText(_translate("ReadSaveData", "TextLabel", None))
-        self.ventanacompleta.setTabText(self.ventanacompleta.indexOf(self.Visualizar),
-                                        _translate("ReadSaveData", "Tab 2", None))
+        self.Tabs.setTabText(self.Tabs.indexOf(self.Visualizar), _translate("ReadSaveData", "Visualizar", None))
 
-##################################################################
-################### Desarrollo de Aplicacion #####################
-##################################################################
 
     def initModels(self):
         self.listview_read.setModel(self.model_read)
@@ -330,7 +324,7 @@ class Ui_Form(QtGui.QWidget):
         self.listview_read.selectionModel().selectionChanged.connect(lambda: self.listread2comboboxplot())
         self.combobox_plot.activated.connect(lambda: self.combobox_plotHandler())
         self.combobox_plot.activated.connect(lambda: self.plotEspectro())
-        self.ventanacompleta.currentChanged.connect(lambda: self.plotEspectro())
+        self.Tabs.currentChanged.connect(lambda: self.plotEspectro())
         self.boton_selecttosave.clicked.connect(lambda: self.boton_selecttosaveHandler())
         self.boton_clearsave.clicked.connect(lambda: self.boton_clearsaveHandler())
         self.boton_save.clicked.connect(lambda: self.boton_saveHandler())
@@ -563,4 +557,3 @@ class Ui_Form(QtGui.QWidget):
         self.close()
 
 
-# ñsdfklasdhfjksd
