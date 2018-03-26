@@ -21,7 +21,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
-    <widget class="QTabWidget" name="ventanacompleta">
+    <widget class="QTabWidget" name="Tabs">
      <property name="minimumSize">
       <size>
        <width>450</width>
@@ -39,7 +39,7 @@
        </size>
       </property>
       <attribute name="title">
-       <string>Tab 1</string>
+       <string>Adquirir</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
@@ -199,7 +199,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>220</width>
-                      <height>90</height>
+                      <height>70</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -221,7 +221,7 @@
                       <property name="minimumSize">
                        <size>
                         <width>95</width>
-                        <height>70</height>
+                        <height>60</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -244,7 +244,7 @@
                       <property name="minimumSize">
                        <size>
                         <width>95</width>
-                        <height>30</height>
+                        <height>25</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -263,7 +263,7 @@
                       <property name="minimumSize">
                        <size>
                         <width>95</width>
-                        <height>30</height>
+                        <height>25</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -307,7 +307,7 @@
                     <property name="minimumSize">
                      <size>
                       <width>220</width>
-                      <height>90</height>
+                      <height>70</height>
                      </size>
                     </property>
                     <property name="maximumSize">
@@ -329,7 +329,7 @@
                       <property name="minimumSize">
                        <size>
                         <width>95</width>
-                        <height>30</height>
+                        <height>25</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -348,7 +348,7 @@
                       <property name="minimumSize">
                        <size>
                         <width>95</width>
-                        <height>30</height>
+                        <height>25</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -371,7 +371,7 @@
                       <property name="minimumSize">
                        <size>
                         <width>95</width>
-                        <height>70</height>
+                        <height>60</height>
                        </size>
                       </property>
                       <property name="maximumSize">
@@ -409,7 +409,7 @@
        </size>
       </property>
       <attribute name="title">
-       <string>Tab 2</string>
+       <string>Visualizar</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>

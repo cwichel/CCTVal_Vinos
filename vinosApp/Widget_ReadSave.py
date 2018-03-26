@@ -11,7 +11,6 @@
 #pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
 ########################################################
 
-
 import os
 import csv
 import glob
@@ -368,7 +367,7 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_loadHandler(self):
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
-        path_read = "../data/Espectros/*.txt"
+        path_read = "../data/Espectros-21-03-2018/*.txt"
         # path_read = "../data/Espectros Vinos/*.txt"
         path_temp = "../data/Temporal_Load"
         if not os.path.isdir(path_temp):
@@ -445,7 +444,8 @@ class Ui_Form(QtGui.QWidget):
             n = len(datos[:])
             y = np.zeros((n-3, 1))
             for i in range(0, n-3):
-                y[i] = float(datos[i+3][0])
+                # y[i] = float(datos[i + 3][1])
+                y[i] = float(datos[i+3][1])
             ax = self.figure.add_subplot(111)
             ax.clear()
             ax.spines["top"].set_visible(False)
@@ -459,6 +459,9 @@ class Ui_Form(QtGui.QWidget):
             self.figure.set_facecolor('white')
             self.graphics_view.draw()
             self.figure.tight_layout()
+
+## En caso de querer visualizar gráficos de Vino, como se implementará en
+## la última etapa de integración
 
     # def plotEspectro(self):
     #     path_temp = "../data/Temporal_Load/"
