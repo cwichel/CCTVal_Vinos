@@ -7,9 +7,13 @@
 # WARNING! All changes made in this file will be lost!
 
 ########################################################
-#TRANSFORM FROM QT DESIGNER TO .PY
-#pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
+# TRANSFORM FROM QT DESIGNER TO .PY
+# pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
 ########################################################
+
+# ===========================================
+#                  Modules
+# ===========================================
 
 import os
 import csv
@@ -24,6 +28,9 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
 
+# ===========================================
+#
+# ===========================================
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -41,6 +48,9 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
+# ===========================================
+#               Clase Ui_Form
+# ===========================================
 
 class Ui_Form(QtGui.QWidget):
 
@@ -60,9 +70,9 @@ class Ui_Form(QtGui.QWidget):
         self.initModels()
         self.setAction()
 
-##################################################################
-###################### UI de QtDesigner ##########################
-##################################################################
+# ===========================================
+#              Ui_Form QtDesigner
+# ===========================================
 
     def setupUi(self, ReadSaveData):
         ReadSaveData.setObjectName(_fromUtf8("ReadSaveData"))
@@ -247,10 +257,11 @@ class Ui_Form(QtGui.QWidget):
         self.label_3.setMinimumSize(QtCore.QSize(250, 25))
         self.label_3.setMaximumSize(QtCore.QSize(400, 25))
         self.label_3.setObjectName(_fromUtf8("label_3"))
-        #########################################################
-        ### Se modifica el archivo diseñado en QtDesigner para
-        ### incluir clase figure para graficar espectros
-        #########################################################
+
+        # ======================================================
+        #  Se modifica el archivo diseñado en QtDesigner para
+        #  incluir clase figure para graficar espectros
+        # ======================================================
 
         self.verticalLayout_19.addWidget(self.label_3)
         self.graphic = FigureCanvas(self.figure)
@@ -260,7 +271,7 @@ class Ui_Form(QtGui.QWidget):
         self.verticalLayout_19.addWidget(self.graphics_view)
         self.verticalLayout_19.addWidget(self.graphic)
 
-        ########################################################
+        # ======================================================
 
         self.verticalLayout_18.addLayout(self.verticalLayout_19)
         self.verticalLayout.addLayout(self.verticalLayout_18)
@@ -290,21 +301,27 @@ class Ui_Form(QtGui.QWidget):
         self.label_3.setText(_translate("ReadSaveData", "TextLabel", None))
         self.Tabs.setTabText(self.Tabs.indexOf(self.Visualizar), _translate("ReadSaveData", "Visualizar", None))
 
+    # ===========================================
+    #          Metodos para clase Ui_Form
+    # ===========================================
 
     def initModels(self):
+        """
+        Función que inicializa los modelos utilizados para  la lectura,
+        escritura y visualización de espectros.
+        """
         self.listview_read.setModel(self.model_read)
         self.combobox_plot.setModel(self.model_read)
         self.listview_save.setModel(self.model_save)
 
     def databaseConnect(self):
-        # Para servidor de base de datos
-        dbConf = {
-            u'dbHost': u'127.0.0.1',
-            u'dbPort': 3306,
-            u'dbUser': u'root',
-            u'dbPass': u'1Q2w3e4r5t6y7u8i9o0p',
-            u'dbName': u'vinosdb'
-        }
+        """
+        Función que realiza las configuraciones necesarias para la conexión
+        a la base de datos de forma local o al servidor habilitado mediante
+        túnel SSH.
+        """
+        # ssh hace el túnel hacia el servidor donde
+        # esta instalada la base de datos
         sshConf = {
             u'sshHost': u'200.1.17.223',
             u'sshPort': 22,
@@ -313,10 +330,23 @@ class Ui_Form(QtGui.QWidget):
             u'localHost': u'127.0.0.1',
             u'localPort': 3037
         }
+        # el servidor corre una base de datos local
+        # con al siguiente configuración
+        dbConf = {
+            u'dbHost': u'127.0.0.1',
+            u'dbPort': 3306,
+            u'dbUser': u'root',
+            u'dbPass': u'1Q2w3e4r5t6y7u8i9o0p',
+            u'dbName': u'vinosdb'
+        }
         self.vinosDB.connect(dbConf=dbConf, sshConf=sshConf)
         print u'Conectado a Base de Datos:', self.vinosDB.conn.is_connected()
 
     def setAction(self):
+        """
+        Función que asocia cada evento en la interfaz con una acción
+        determinada.
+        """
         self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
@@ -330,10 +360,21 @@ class Ui_Form(QtGui.QWidget):
         self.boton_save.clicked.connect(lambda: self.boton_saveHandler())
 
     def resizeEvent(self, event):
+        """
+        Funcion que reajusta el tamaño del gráfico al cambiar el
+        tamalo de la interfaz
+        :param event:
+        """
         if self.figure.get_axes():
             self.figure.tight_layout()
 
     def boton_estadoHandler(self, tankName):
+        """
+
+        :param tankName:
+        :return:
+        """
+
         if not tankName:
             data = u'*** ERROR: No ha ingresado número de estanque ***'
             flag = 1
@@ -361,7 +402,7 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_loadHandler(self):
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
-        path_read = "../data/Espectros-21-03-2018/*.txt"
+        path_read = "../data/Espectros_vino_21-03-2018/*.txt"
         # path_read = "../data/Espectros Vinos/*.txt"
         path_temp = "../data/Temporal_Load"
         if not os.path.isdir(path_temp):
@@ -438,7 +479,6 @@ class Ui_Form(QtGui.QWidget):
             n = len(datos[:])
             y = np.zeros((n-3, 1))
             for i in range(0, n-3):
-                # y[i] = float(datos[i + 3][1])
                 y[i] = float(datos[i+3][1])
             ax = self.figure.add_subplot(111)
             ax.clear()
@@ -453,41 +493,6 @@ class Ui_Form(QtGui.QWidget):
             self.figure.set_facecolor('white')
             self.graphics_view.draw()
             self.figure.tight_layout()
-
-## En caso de querer visualizar gráficos de Vino, como se implementará en
-## la última etapa de integración
-
-    # def plotEspectro(self):
-    #     path_temp = "../data/Temporal_Load/"
-    #     itemTotal = self.model_read.rowCount(self)
-    #     itemIndex = self.combobox_plot.currentIndex()
-    #     if itemTotal is not 0 and itemIndex is not -1:
-    #         name = self.model_read.consultData(itemIndex)
-    #         file = open(path_temp + name, "r")
-    #         datos = list(csv.reader(file, delimiter=','))
-    #         n = len(datos[:])
-    #         y = np.zeros((n-1, 1))
-    #         x = np.zeros((n - 1, 1))
-    #         for i in range(0, n-1):
-    #             y[i] = float(datos[i+1][1])
-    #             x[i] = float(datos[i+1][0])
-    #         ax = self.figure.add_subplot(111)
-    #         ax.clear()
-    #         ax.spines["top"].set_visible(False)
-    #         ax.spines["right"].set_visible(False)
-    #         ax.get_xaxis().tick_bottom()
-    #         ax.get_yaxis().tick_left()
-    #         ax.set_xlabel("Frecuencia [Hz]", fontsize=12)
-    #         ax.set_ylabel("Amplitud", fontsize=12)
-    #         ax.plot(x, np.flipud(y), color='g')
-    #         ax.axis('tight')
-    #         self.figure.set_facecolor('white')
-    #         self.graphics_view.draw()
-    #         self.figure.tight_layout()
-
-##########################################################
-##################    save to DB    ######################
-##########################################################
 
     def boton_selecttosaveHandler(self):
         itemTotal = self.model_read.rowCount(self)
@@ -536,7 +541,7 @@ class Ui_Form(QtGui.QWidget):
                     id_vino = data_vinos[0][1]
                     item = self.model_save.model_list[itemIndex]
                     filename = path_temp + item
-                    #self.vinosDB.new_espectro(filename, id_vino, id_estanque)
+                    self.vinosDB.new_espectro(filename, id_vino, id_estanque)
                     itemIndexRead = self.model_read.model_list.index(item)
                     self.model_save.removeRows(itemIndex, 1)
                     self.model_read.removeRows(itemIndexRead, 1)

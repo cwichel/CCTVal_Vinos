@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
-# =============================================================================
+
+# ===========================================
 # Modules
-# =============================================================================
+# ===========================================
+
 import sshtunnel
 import numpy as np
 import mysql.connector as msq
 from mysql.connector import errorcode
 
 
-# =============================================================================
-# VinosDBL
-# =============================================================================
+# ===========================================
+# Clase VinosDBL
+# ===========================================
+
 class VinosDBL:
+
+    # inicialización
     def __init__(self):
         self.isSSH = False
         self.data = []
@@ -49,8 +54,9 @@ class VinosDBL:
     # =================================
     # Metodos de conexion
     # =================================
-    def connect(self, dbConf, sshConf=None):
-        '''
+
+    def connect(self, dbConf, sshConf):
+        """
         Función que permite conectarse a una base de datos. Si sshConf es None, se conecta de forma directa,
         en caso contrario utiliza el tunel ssh.
         :param dbConf:  diccionario con:    'dbHost', 'dbPort', 'dbUser', 'dbPass', dbName'
@@ -58,7 +64,8 @@ class VinosDBL:
         :return: Boolean.
                 - True: Connection succeeded.
                 - False: Error.
-        '''
+        """
+
         try:
             if sshConf is not None:
                 self.server = sshtunnel.SSHTunnelForwarder(
@@ -98,12 +105,12 @@ class VinosDBL:
             return False
 
     def close(self):
-        '''
+        """
         Función que permite cerrar la conexión actual a la base de datos.
         :return: Boolean.
                 - True: Connection closed.
                 - False: Error.
-        '''
+        """
         try:
             self.conn.close()
             if self.isSSH:
@@ -116,14 +123,15 @@ class VinosDBL:
     # =================================
     # Metodos utilitarios
     # =================================
+
     def is_table(self, table_name):
-        '''
+        """
         Función que indica si una tabla existe o no en la base de datos.
         :param table_name: Str.
         :return: Boolean.
                 - True: Table exist.
                 - False: Table doesn't exist.
-        '''
+        """
         try:
             query = u"show tables like '%s'" % table_name
             cursor = self.conn.cursor()
@@ -138,11 +146,11 @@ class VinosDBL:
             return False
 
     def get_columns(self, table_name):
-        '''
+        """
         Función que devuelve los nombres de sus columnas y sus tipos de dato.
         :param table_name: Str.
         :return: names: List, types: List.
-        '''
+        """
         if self.is_table(table_name):
             query = u"select * from %s limit 0" % table_name
             cursor = self.conn.cursor()
@@ -167,30 +175,30 @@ class VinosDBL:
 
     @staticmethod
     def enc_file(file_name):
-        '''
+        """
         Función que permite codificar un archivo para almacenarlo en la DB.
         :param file_name:  Str.
         :return: Str (coded).
-        '''
+        """
         file_data = open(file_name, u'r').read()
         return file_data.encode(u'base64')
 
     @staticmethod
     def dec_file(b64_file):
-        '''
+        """
         Función que permite decodificar un archivo luego de bajarlo de la DB.
         :param b64_file: Str (coded).
         :return: Str.
-        '''
+        """
         return b64_file.decode(u'base64')
 
     @staticmethod
     def to_numpy(data):
-        '''
+        """
         Convierte un conjunto de datos en un arreglo Numpy (de tipo 'object').
         :param data: Array/List.
         :return: Numpy Array.
-        '''
+        """
         if type(data) is not np.ndarray:
             return np.array(data, dtype=object)
         else:
@@ -199,15 +207,18 @@ class VinosDBL:
     # =================================
     # Metodos para carga de datos
     # =================================
+
     def simple_mysql_save(self, query, data):
-        '''
+        """
         Función genérica para almacenar datos en una DB.
         :param query: Str.
         :param data: Array.
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-        '''
+
+        """
+
         indata = self.to_numpy(data)
         cursor = self.conn.cursor()
         try:
@@ -227,14 +238,15 @@ class VinosDBL:
             return False
 
     def new_vino(self, data):
-        '''
+        """
         Función que permite almacenar datos en la tabla 'vinos'.
         :param data: Array.
                 - Line format:  [nombre(str), tipo(str), vina(str), valle(str), ano(str), descripcion(str)]
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-        '''
+        """
+
         if self.is_table(u'vinos'):
             query = u"insert into vinos (nombre, tipo, vina, valle, ano, descripcion) value ('%s', '%s', '%s', '%s', '%d', '%s')"
             # Carga de datos
@@ -244,14 +256,15 @@ class VinosDBL:
             return False
 
     def new_estanque(self, data):
-        '''
+        """
         Función que permite almacenar datos en la tabla 'estanques'.
         :param data: Array.
                 - Line format:  [numero(int), descripcion(str)]
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-        '''
+        """
+
         if self.is_table(u'estanques'):
             query = u"insert into estanques (numero, descripcion) value ('%d', '%s')"
             # Carga de datos
@@ -261,14 +274,15 @@ class VinosDBL:
             return False
 
     def new_vino_in_estanque(self, data):
-        '''
+        """
         Función que permite almacenar datos en la tabla 'fechas_vinos', asociando temporalmente vinos y estanques.
         :param data: Array.
                 - Line Format:  [estanques_id(int), vinos_id(int)]
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-        '''
+        """
+
         if self.is_table(u'vinos') and self.is_table(u'estanques') and \
            self.is_table(u'fechas_vinos'):
             query = u"insert into fechas_vinos (id_estanques, id_vinos) value ('%d', '%d')"
@@ -279,7 +293,7 @@ class VinosDBL:
             return False
 
     def new_parametro(self, parametros, espectro_id):
-        '''
+        """
         Función que permite almacenar datos en la tabla 'parametros', asociándolos a un espectro determinado.
         :param parametros: Array(float).
                 - Line Format: [SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad]
@@ -287,12 +301,13 @@ class VinosDBL:
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-        '''
+        """
+
         if self.is_table(u'parametros'):
             query = u"insert into parametros " + \
                     u"(SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad, id_espectros) " + \
                     u"value ('%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%f', '%d')"
-            # Preparar a data
+            # Preparar la data
             data = self.to_numpy(parametros)
             if data.ndim is 2:
                 data = np.insert(data, 9, espectro_id, axis=1)
@@ -305,7 +320,7 @@ class VinosDBL:
             return False
 
     def new_espectro(self, filename, vino_id, estanque_id):
-        '''
+        """
         Función que permite almacenar datos en la tabla 'espectros' y registrar este ingreso en la tabla
         'fechas_espectros', registrandolo temporalmente y asociándolo a un determinado vino/estanque.
         :param filename: Str.
@@ -314,7 +329,7 @@ class VinosDBL:
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-        '''
+        """
         if self.is_table(u'vinos') and self.is_table(u'estanques') and self.is_table(u'espectros') and self.is_table(u'fechas_espectros'):
             # ----------
             query1 = u"insert into espectros (espectro, flag_procesado) value ('%s', '%d')"
@@ -347,7 +362,14 @@ class VinosDBL:
     # =================================
     # Metodos para recuperar datos
     # =================================
+
     def simple_mysql_read(self, query, data):
+        """
+        Función genérica para leer datos de una DB.
+        :param query: Str.
+        :param data: Tuple.
+        :return: result: Array con datos de lectura
+        """
         cursor = self.conn.cursor()
         try:
             # ---------
@@ -360,8 +382,12 @@ class VinosDBL:
             cursor.close()
             return None
 
-    # Lee datos de tabla estanques
     def read_estanque(self, data):
+        """
+        Función que permite leer datos de la tabla 'estanques'.
+        :param data: Tuple.
+        :return: result: Array con datos de lectura.
+        """
         if self.is_table(u'estanques'):
             query = u" select numero, descripcion, id_estanque from estanques " + \
                     u" where numero = '%d' "
@@ -370,21 +396,27 @@ class VinosDBL:
             print u"*** ERROR: Table doesn't exists ***"
             return None
 
-    # Leer datos desde tabla vinos
-    # Supuesto: Se accede a la tabla vinos por años, nombre y tipo
     def read_vino(self, metodo, data):
-
+        """
+        Función que permite leer datos de la tabla 'vinos' por año,
+        viña o entre años.
+        :param metodo: Str.
+        :param data: Tuple.
+        :return: result: Array con datos de lectura.
+        """
+        # Query base
         initquery = " select * from vinos "
 
         if self.is_table(u'vinos'):
-
+            # Leer dependiendo del modo de lectura deseado
+            # y de la cantidad de datos de entrada
             if metodo == u'ano':
                 l = len(data)
+                # Según cantidad de años completar query basica
                 if l > 1:
                     if l == 2:
                         query = initquery + u" where ano between %d and %d "
                     else:
-
                         aux = u"where ano = %d"
                         concat = initquery
                         for i in range(l):
@@ -393,42 +425,45 @@ class VinosDBL:
                         query = concat
                 else:
                     query = initquery + u" where ano = %d "
-
+            # Leer tabla vinos por el nombre del vino
             elif metodo == u'nombre':
                 l = len(data)
+                # Leer uno o mas vinos
                 if l > 1:
-
                     aux = u" where nombre = '%s' "
                     concat = initquery
                     for i in range(l):
                         concat += aux
                         aux = u" or nombre = '%s' "
                     query = concat
-
                 else:
                     query = initquery + u" where nombre = '%s' "
-
+            # Leer por tipo de vino
             elif metodo == u'tipo':
-
                 l = len(data)
+                # Leer uno o mas tipos de vino
                 if l > 1:
-
                     aux = u" where tipo = '%s' "
                     concat = initquery
                     for i in range(l):
                         concat += aux
                         aux = u" or tipo = '%s' "
                     query = concat
-
                 else:
                     query = initquery + u" where tipo = '%s' "
-
             return self.simple_mysql_read(query, tuple(data))
         else:
             print u"*** ERROR: Table doesn't exists ***"
             return None
 
     def read_fechavino(self, data):
+        """
+        Función que permite leer datos de la tabla 'fechas_vinos' por
+        id del estanque correspondiente.
+        :param data: Tuple.
+        :return: result: Array con datos de lectura.
+        """
+        # Comprueba si la tabla existe y lee el dato correspondiente a id_estanque
         if self.is_table(u'fechas_vinos'):
             query = u" select fecha, id_vinos from fechas_vinos " + \
                     u" where id_estanques = '%d' "
