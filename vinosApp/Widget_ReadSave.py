@@ -370,11 +370,11 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_estadoHandler(self, tankName):
         """
-
-        :param tankName:
-        :return:
+        Función que asocia una acción a oprimir el botón "estado". La acción
+        es verificar si el número de estanque ingresado existe en la tabla
+        estanques de la base de datos.
+        :param tankName: Str.
         """
-
         if not tankName:
             data = u'*** ERROR: No ha ingresado número de estanque ***'
             flag = 1
@@ -386,6 +386,15 @@ class Ui_Form(QtGui.QWidget):
             self.display_row1(data, tankName, flag)
 
     def display_row1(self, data, tankName, flag):
+        """
+        Función que despliega información asociada al número de estanque del
+        parámetro "tankName", en objeto display_estanques. Específicamente la
+        información contenida en la tabla estanques de la base de datos (nombre,
+        tipo vino, año y descripción).
+        :param data: Tuple
+        :param tankName: Str
+        :param flag: Bool
+        """
         self.display_estanques.clear()
         if flag == False:
             if not data:
@@ -401,6 +410,13 @@ class Ui_Form(QtGui.QWidget):
             self.display_estanques.append(u' %s' % data)
 
     def boton_loadHandler(self):
+        """
+        Funcion que carga un espectro del directorio especificado y lo almacena
+        en directorio temporal creado, en espera de visualización en gráfico o
+        escritura a base de datos. También incluye el nombre del archivo cargado
+        a un modelo (model_read) para administrar los archivos a guardar o
+        visualizar.
+        """
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
         path_read = "../data/Espectros_vino_21-03-2018/*.txt"
         # path_read = "../data/Espectros Vinos/*.txt"
@@ -418,6 +434,10 @@ class Ui_Form(QtGui.QWidget):
         self.listview_read.setCurrentIndex(self.model_read.index(0))
 
     def boton_clearselectHandler(self):
+        """
+        Funcion que borra el archivo seleccionado en lista (listview_read) tanto
+        del modelo (model_read) como del drectorio temporal.
+        """
         path_temp = "../data/Temporal_Load/"
         itemIndex = self.listview_read.currentIndex().row()
         itemTotal = self.model_read.rowCount(None)
