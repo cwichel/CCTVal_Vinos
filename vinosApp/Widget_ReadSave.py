@@ -437,6 +437,7 @@ class Ui_Form(QtGui.QWidget):
         """
         Funcion que borra el archivo seleccionado en lista (listview_read) tanto
         del modelo (model_read) como del drectorio temporal.
+        VOYYYY!!!
         """
         path_temp = "../data/Temporal_Load/"
         itemIndex = self.listview_read.currentIndex().row()
