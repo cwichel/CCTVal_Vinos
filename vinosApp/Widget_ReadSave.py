@@ -370,7 +370,7 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_estadoHandler(self, tankName):
         """
-        Función que asocia una acción a oprimir el botón "boton_estado" (en GUI
+        Función que asocia una acción al oprimir el botón "boton_estado" (en GUI
         botón "Verificar"). La acción es verificar si el número de estanque
         ingresado existe en la tabla "estanques" de la base de datos.
         :param tankName: Str.
@@ -411,7 +411,7 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_loadHandler(self):
         """
-        Función que asocia una acción a oprimir el botón "boton_load" (en GUI
+        Función que asocia una acción al oprimir el botón "boton_load" (en GUI
         botón "Adquirir"). La acción es cargar un espectro del directorio especificado
         y lo almacena en directorio temporal creado, en espera de visualización en
         gráfico o escritura a base de datos. También incluye el nombre del archivo
@@ -436,10 +436,10 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_clearselectHandler(self):
         """
-        
-        Funcion que borra el archivo seleccionado en lista (listview_read) tanto
-        del modelo (model_read) como del drectorio temporal. Luego de eliminar
-        archivo se actualiza el modelo (model_read) y la lista (listview_read).
+        Función que asocia una acción al oprimir el botón "boton_clearselect" (en GUI
+        botón "Clear Select"). Elimina el archivo seleccionado en la lista "listview_read"
+        del directorio temporal y del modelo "model_read". Luego de eliminar el archivo
+        se actualiza el modelo (model_read) y la lista (listview_read).
         """
         path_temp = "../data/Temporal_Load/"
         itemIndex = self.listview_read.currentIndex().row()
@@ -462,7 +462,8 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_clearallHandler(self):
         """
-        Funcion que elimina todos los archivos del directorio temporal,
+        Función que asocia una acción al oprimir el botón "boton_clearall" (en GUI
+        botón "Clear All"). Elimina todos los archivos del directorio temporal,
         de la lista (listview_read) y del modelo (model_read). Luego de
         eliminar los archivos se actualiza el modelo (model_read) y la
         lista (listview_read).
