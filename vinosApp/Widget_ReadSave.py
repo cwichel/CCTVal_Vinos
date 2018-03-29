@@ -6,10 +6,10 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-########################################################
+# ======================================================
 # TRANSFORM FROM QT DESIGNER TO .PY
 # pyuic4 -o Widget_ReadSave.py Widget_ReadSave.ui
-########################################################
+# ======================================================
 
 # ===========================================
 #                  Modules
@@ -347,7 +347,7 @@ class Ui_Form(QtGui.QWidget):
         Función que asocia cada evento en la interfaz con una acción
         determinada.
         """
-        self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName = self.linedit_estanquein.text()))
+        self.boton_estado.clicked.connect(lambda: self.boton_estadoHandler(tankName=self.linedit_estanquein.text()))
         self.boton_load.clicked.connect(lambda: self.boton_loadHandler())
         self.boton_clearall.clicked.connect(lambda: self.boton_clearallHandler())
         self.boton_clearselect.clicked.connect(lambda: self.boton_clearselectHandler())
@@ -370,9 +370,9 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_estadoHandler(self, tankName):
         """
-        Función que asocia una acción a oprimir el botón "estado". La acción
-        es verificar si el número de estanque ingresado existe en la tabla
-        estanques de la base de datos.
+        Función que asocia una acción a oprimir el botón "boton_estado" (en GUI
+        botón "Verificar"). La acción es verificar si el número de estanque
+        ingresado existe en la tabla "estanques" de la base de datos.
         :param tankName: Str.
         """
         if not tankName:
@@ -388,8 +388,8 @@ class Ui_Form(QtGui.QWidget):
     def display_row1(self, data, tankName, flag):
         """
         Función que despliega información asociada al número de estanque del
-        parámetro "tankName", en objeto display_estanques. Específicamente la
-        información contenida en la tabla estanques de la base de datos (nombre,
+        parámetro "tankName", en objeto "display_estanques". Específicamente la
+        información contenida en la tabla "estanques" de la base de datos (nombre,
         tipo vino, año y descripción).
         :param data: Tuple
         :param tankName: Str
@@ -411,10 +411,11 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_loadHandler(self):
         """
-        Funcion que carga un espectro del directorio especificado y lo almacena
-        en directorio temporal creado, en espera de visualización en gráfico o
-        escritura a base de datos. También incluye el nombre del archivo cargado
-        a un modelo (model_read) para administrar los archivos a guardar o
+        Función que asocia una acción a oprimir el botón "boton_load" (en GUI
+        botón "Adquirir"). La acción es cargar un espectro del directorio especificado
+        y lo almacena en directorio temporal creado, en espera de visualización en
+        gráfico o escritura a base de datos. También incluye el nombre del archivo
+        cargado al modelo "model_read" para administrar los archivos a guardar o
         visualizar.
         """
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
@@ -435,9 +436,10 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_clearselectHandler(self):
         """
+        
         Funcion que borra el archivo seleccionado en lista (listview_read) tanto
-        del modelo (model_read) como del drectorio temporal.
-        VOYYYY!!!
+        del modelo (model_read) como del drectorio temporal. Luego de eliminar
+        archivo se actualiza el modelo (model_read) y la lista (listview_read).
         """
         path_temp = "../data/Temporal_Load/"
         itemIndex = self.listview_read.currentIndex().row()
@@ -459,6 +461,12 @@ class Ui_Form(QtGui.QWidget):
             print u'No item selected/available!'
 
     def boton_clearallHandler(self):
+        """
+        Funcion que elimina todos los archivos del directorio temporal,
+        de la lista (listview_read) y del modelo (model_read). Luego de
+        eliminar los archivos se actualiza el modelo (model_read) y la
+        lista (listview_read).
+        """
         path_temp = "../data/Temporal_Load/"
         aux_list = []
         for item in self.model_read.model_list:
@@ -475,6 +483,11 @@ class Ui_Form(QtGui.QWidget):
         self.model_save.reset()
 
     def combobox_plotHandler(self):
+        """
+        Función que actualiza los índices correspondientes al modelo
+        para ser visualizados en el gráfico, según lo que se encuentra
+        seleccionado en el combobox (combobox_plot).
+        """
         itemIndex = self.combobox_plot.currentIndex()
         itemTotal = self.model_read.rowCount(None)
         if itemTotal is not 0 and itemIndex is not -1:
@@ -486,10 +499,21 @@ class Ui_Form(QtGui.QWidget):
             print u'No item selected/available!'
 
     def listread2comboboxplot(self):
+        """
+        Asigna la seleccion en la lista (listview_read) a la seleccion
+        en el combobox (combobox_plot), para visualizar el espectro
+        seleccionado en la lista (listview_read) al cambiar de pestaña
+        en la aplicación.
+        """
         itemIndex = self.listview_read.currentIndex().row()
         self.combobox_plot.setCurrentIndex(itemIndex)
 
     def plotEspectro(self):
+        """
+        Funcion que grafica el espectro seleccionado en el combobox
+        (combobox_plot). Al cambiar la selección en el combobox, se
+        actualiza también el gráfico al espectro seleccionado.
+        """
         path_temp = "../data/Temporal_Load/"
         itemTotal = self.model_read.rowCount(self)
         itemIndex = self.combobox_plot.currentIndex()
@@ -516,6 +540,12 @@ class Ui_Form(QtGui.QWidget):
             self.figure.tight_layout()
 
     def boton_selecttosaveHandler(self):
+        """
+        Funcion que selecciona archivos de la lista (listview_read)
+        relacionada al modelo (model_read)
+
+        """
+
         itemTotal = self.model_read.rowCount(self)
         itemIndex = self.listview_read.currentIndex().row()
         if itemTotal is not 0 and itemIndex is not -1:
