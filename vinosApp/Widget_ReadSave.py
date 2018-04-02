@@ -371,8 +371,8 @@ class Ui_Form(QtGui.QWidget):
     def boton_estadoHandler(self, tankName):
         """
         Función que asocia una acción al oprimir el botón "boton_estado" (en GUI
-        botón "Verificar"). La acción es verificar si el número de estanque
-        ingresado existe en la tabla "estanques" de la base de datos.
+        botón "Verificar", Pestaña Adquirir). La acción es verificar si el número
+        de estanque ingresado existe en la tabla "estanques" de la base de datos.
         :param tankName: Str.
         """
         if not tankName:
@@ -388,9 +388,9 @@ class Ui_Form(QtGui.QWidget):
     def display_row1(self, data, tankName, flag):
         """
         Función que despliega información asociada al número de estanque del
-        parámetro "tankName", en objeto "display_estanques". Específicamente la
-        información contenida en la tabla "estanques" de la base de datos (nombre,
-        tipo vino, año y descripción).
+        parámetro "tankName", en objeto "display_estanques" (Pestaña Adquirir).
+        Específicamente la información contenida en la tabla "estanques" de la
+        base de datos (nombre, tipo vino, año y descripción).
         :param data: Tuple
         :param tankName: Str
         :param flag: Bool
@@ -412,11 +412,11 @@ class Ui_Form(QtGui.QWidget):
     def boton_loadHandler(self):
         """
         Función que asocia una acción al oprimir el botón "boton_load" (en GUI
-        botón "Adquirir"). La acción es cargar un espectro del directorio especificado
-        y lo almacena en directorio temporal creado, en espera de visualización en
-        gráfico o escritura a base de datos. También incluye el nombre del archivo
-        cargado al modelo "model_read" para administrar los archivos a guardar o
-        visualizar.
+        botón "Adquirir", Pestaña Adquirir). La acción es cargar un espectro del
+        directorio especificado y lo almacena en directorio temporal creado, en
+        espera de visualización en gráfico o escritura a base de datos. También
+        incluye el nombre del archivo cargado al modelo "model_read" para administrar
+        los archivos a guardar o visualizar.
         """
         ts = unicode(datetime.datetime.now().strftime("- %Y-%m-%d %H-%M-%S"))
         path_read = "../data/Espectros_vino_21-03-2018/*.txt"
@@ -437,9 +437,10 @@ class Ui_Form(QtGui.QWidget):
     def boton_clearselectHandler(self):
         """
         Función que asocia una acción al oprimir el botón "boton_clearselect" (en GUI
-        botón "Clear Select"). Elimina el archivo seleccionado en la lista "listview_read"
-        del directorio temporal y del modelo "model_read". Luego de eliminar el archivo
-        se actualiza el modelo (model_read) y la lista (listview_read).
+        botón "Clear Select", Pestaña Adquirir). Elimina el archivo seleccionado en
+        la lista "listview_read" del directorio temporal y del modelo "model_read".
+        Luego de eliminar el archivo se actualiza el modelo "model_read" y la lista
+        "listview_read".
         """
         path_temp = "../data/Temporal_Load/"
         itemIndex = self.listview_read.currentIndex().row()
@@ -463,10 +464,9 @@ class Ui_Form(QtGui.QWidget):
     def boton_clearallHandler(self):
         """
         Función que asocia una acción al oprimir el botón "boton_clearall" (en GUI
-        botón "Clear All"). Elimina todos los archivos del directorio temporal,
-        de la lista (listview_read) y del modelo (model_read). Luego de
-        eliminar los archivos se actualiza el modelo (model_read) y la
-        lista (listview_read).
+        botón "Clear All", Pestaña Adquirir). Elimina todos los archivos del directorio
+        temporal, de la lista "listview_read" y del modelo "model_read". Luego de eliminar
+        los archivos se actualiza el modelo "model_read" y la lista "listview_read".
         """
         path_temp = "../data/Temporal_Load/"
         aux_list = []
@@ -485,9 +485,9 @@ class Ui_Form(QtGui.QWidget):
 
     def combobox_plotHandler(self):
         """
-        Función que actualiza los índices correspondientes al modelo
-        para ser visualizados en el gráfico, según lo que se encuentra
-        seleccionado en el combobox (combobox_plot).
+        Función que actualiza los índices correspondientes al modelo para ser
+        visualizados en el gráfico (Pestaña Visualizar), según lo que se encuentra
+        seleccionado en el combobox "combobox_plot" (Pestaña Visualizar).
         """
         itemIndex = self.combobox_plot.currentIndex()
         itemTotal = self.model_read.rowCount(None)
@@ -501,9 +501,9 @@ class Ui_Form(QtGui.QWidget):
 
     def listread2comboboxplot(self):
         """
-        Asigna la seleccion en la lista (listview_read) a la seleccion
-        en el combobox (combobox_plot), para visualizar el espectro
-        seleccionado en la lista (listview_read) al cambiar de pestaña
+        Asigna la seleccion en la lista "listview_read" a la seleccion
+        en el combobox "combobox_plot" (Pestaña Visualizar), para visualizar el espectro
+        seleccionado en la lista "listview_read" al cambiar de pestaña
         en la aplicación.
         """
         itemIndex = self.listview_read.currentIndex().row()
@@ -512,7 +512,7 @@ class Ui_Form(QtGui.QWidget):
     def plotEspectro(self):
         """
         Funcion que grafica el espectro seleccionado en el combobox
-        (combobox_plot). Al cambiar la selección en el combobox, se
+        "combobox_plot" (Pestaña Visualizar). Al cambiar la selección en el combobox, se
         actualiza también el gráfico al espectro seleccionado.
         """
         path_temp = "../data/Temporal_Load/"
@@ -542,11 +542,11 @@ class Ui_Form(QtGui.QWidget):
 
     def boton_selecttosaveHandler(self):
         """
-        Funcion que selecciona archivos de la lista (listview_read)
-        relacionada al modelo (model_read)
-
+        Función que asocia una acción al oprimir el botón "boton_selecttosave" (en GUI
+        botón "Seleccionar", Pestaña Adquirir). Selecciona archivos de la lista "listview_read"
+        relacionada al modelo "model_read", para visualizar en lista "listview_save" y guardar
+        en modelo "model_save".
         """
-
         itemTotal = self.model_read.rowCount(self)
         itemIndex = self.listview_read.currentIndex().row()
         if itemTotal is not 0 and itemIndex is not -1:
@@ -561,6 +561,12 @@ class Ui_Form(QtGui.QWidget):
             print u'Item no seleccionado/disponible!'
 
     def boton_clearsaveHandler(self):
+        """
+        Función que asocia una acción al oprimir el botón "boton_clearsave" (en GUI
+        botón "Clear Select", Pestaña Adquirir). Elimina el archivo seleccionado en
+        la lista "listview_save" y del modelo "model_save". Luego de eliminar el archivo
+        de la lista se actualiza el modelo "model_save" y la lista "listview_save".
+        """
         itemIndex = self.listview_save.currentIndex().row()
         itemTotal = self.model_save.rowCount(None)
         if itemTotal is not 0 and itemIndex is not -1:
@@ -574,6 +580,12 @@ class Ui_Form(QtGui.QWidget):
             print u'No item selected/available!'
 
     def boton_saveHandler(self):
+        """
+        Función que asocia una acción al oprimir el botón "boton_save" (en GUI
+        botón "Guardar a Base de Datos", Pestaña Adquirir). La acción es guardar
+        el espectro seleccionado en la lista "listview_save" a la base de datos
+        y actualizar el modelo "model save" luego de realizada la carga del archivo.
+        """
         tankName = self.linedit_estanquein.text()
         if not tankName:
             data = u'*** ERROR: No ha ingresado número de estanque *** \n ' \
@@ -602,6 +614,12 @@ class Ui_Form(QtGui.QWidget):
                 print u'No ha seleccionado/adquirido espectro para guardar!'
 
     def closeEvent(self, event):
+        """
+        Función que asocia una acción al evento de cierre de la aplicación.
+        Limpia los archivos almacenados en el directorio temporal, limpia los
+        nombres contenidos en los modelos, cierra la conexión a la base de
+        datos y cierra la aplicación.
+        """
         path_temp = "../data/Temporal_Load/*.txt"
         files = glob.glob(path_temp)
         for file in files:
