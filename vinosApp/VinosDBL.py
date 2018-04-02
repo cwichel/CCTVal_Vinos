@@ -216,7 +216,6 @@ class VinosDBL:
         :return: Boolean.
                 - True: Data stored correctly.
                 - False: Error.
-
         """
 
         indata = self.to_numpy(data)
@@ -246,7 +245,6 @@ class VinosDBL:
                 - True: Data stored correctly.
                 - False: Error.
         """
-
         if self.is_table(u'vinos'):
             query = u"insert into vinos (nombre, tipo, vina, valle, ano, descripcion) value ('%s', '%s', '%s', '%s', '%d', '%s')"
             # Carga de datos
@@ -264,7 +262,6 @@ class VinosDBL:
                 - True: Data stored correctly.
                 - False: Error.
         """
-
         if self.is_table(u'estanques'):
             query = u"insert into estanques (numero, descripcion) value ('%d', '%s')"
             # Carga de datos
@@ -282,7 +279,6 @@ class VinosDBL:
                 - True: Data stored correctly.
                 - False: Error.
         """
-
         if self.is_table(u'vinos') and self.is_table(u'estanques') and \
            self.is_table(u'fechas_vinos'):
             query = u"insert into fechas_vinos (id_estanques, id_vinos) value ('%d', '%d')"
@@ -302,7 +298,6 @@ class VinosDBL:
                 - True: Data stored correctly.
                 - False: Error.
         """
-
         if self.is_table(u'parametros'):
             query = u"insert into parametros " + \
                     u"(SO2L, SO2T, AV, `AT(Sulfurica)`, `AT(Tartarica)`, PH, MR, GA, Densidad, id_espectros) " + \

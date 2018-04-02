@@ -3,8 +3,6 @@
 # Form implementation generated from reading ui file 'Widget_ReadSave.ui'
 #
 # Created by: PyQt4 UI code generator 4.11.4
-#
-# WARNING! All changes made in this file will be lost!
 
 # ======================================================
 # TRANSFORM FROM QT DESIGNER TO .PY
@@ -630,5 +628,3 @@ class Ui_Form(QtGui.QWidget):
         self.model_save.reset()
         self.vinosDB.close()
         self.close()
-
-
